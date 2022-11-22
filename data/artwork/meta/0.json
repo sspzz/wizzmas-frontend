@@ -1,0 +1,13 @@
+{
+    "description": "Wizzmas Artworks",
+    "external_url": "https://wizzmas.wtf",
+    "name": "Wizzmas Artwork #0",
+    "image": "https://wizzmas.wtf/api/artwork/img/0",
+    "background_color": "000000",
+    "attributes": [
+      {
+        "trait_type": "Scene",
+        "value": "Hue Master's Pass"
+      }
+    ]
+  }
