@@ -3,6 +3,8 @@ import {
   WagmiConfig,
   createClient,
   configureChains,
+  chain,
+  Chain,
   defaultChains,
 } from "wagmi";
 import type { AppProps } from "next/app";
@@ -11,15 +13,43 @@ import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
 import { InjectedConnector } from "wagmi/connectors/injected";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
+import { alchemyProvider } from "wagmi/providers/alchemy";
+import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
+import { ConnectKitProvider } from "connectkit";
 
-const { chains, provider, webSocketProvider } = configureChains(defaultChains, [
-  // alchemyProvider({
-  //   apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY ?? "",
-  //   priority: 0,
-  //   weight: 1,
-  // }),
-  publicProvider({ priority: 1, weight: 2 }),
-]);
+const localChain: Chain = {
+  id: 31337,
+  name: "Anvil",
+  network: "ethereum",
+  nativeCurrency: {
+    decimals: 18,
+    name: "Ethereum",
+    symbol: "ETH",
+  },
+  rpcUrls: {
+    default: "http://localhost:8545",
+  },
+  testnet: true,
+};
+const { chains, provider, webSocketProvider } = configureChains(
+  [chain.mainnet, localChain],
+  [
+    alchemyProvider({
+      apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY ?? "",
+      priority: 0,
+      weight: 1,
+    }),
+    jsonRpcProvider({
+      rpc: (chain) => {
+        if (chain.id !== localChain.id) return null;
+        return { http: chain.rpcUrls.default };
+      },
+      priority: 0,
+      weight: 1,
+    }),
+    publicProvider({ priority: 1, weight: 2 }),
+  ]
+);
 
 // Set up client
 const client = createClient({
@@ -53,7 +83,15 @@ const client = createClient({
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <WagmiConfig client={client}>
-      <Component {...pageProps} />
+      <ConnectKitProvider
+        theme="retro"
+        customTheme={{
+          "--ck-font-family": '"Alagard"',
+          "--ck-body-background": "#eee",
+        }}
+      >
+        <Component {...pageProps} />
+      </ConnectKitProvider>
     </WagmiConfig>
   );
 }
