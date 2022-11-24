@@ -86,7 +86,7 @@ const WalletArtworkTypePicker = ({
   }
 
   return (
-    <p>
+    <Content>
       {balances && (
         <>
           Select Artwork:
@@ -105,7 +105,7 @@ const WalletArtworkTypePicker = ({
             ))}
         </>
       )}
-    </p>
+    </Content>
   );
 };
 
@@ -313,7 +313,7 @@ const WalletERC721TypePicker = ({
   }
 
   return (
-    <p>
+    <Content>
       Select NFT:
       {allTokens.map((token, i) => (
         <div
@@ -327,7 +327,7 @@ const WalletERC721TypePicker = ({
           />
         </div>
       ))}
-    </p>
+    </Content>
   );
 };
 
@@ -340,16 +340,16 @@ const CardMessagePicker = ({
   onCardMessageIdSelected,
 }: CardMessagePickerProps) => {
   return (
-    <p>
+    <Content>
       Select Message:
       <div
         onClick={() => {
           onCardMessageIdSelected(0);
         }}
       >
-        TODO
+        Placeholder message content
       </div>
-    </p>
+    </Content>
   );
 };
 
@@ -387,7 +387,7 @@ const CardMint: NextPage<CardMintProps> = ({
   });
 
   return (
-    <p>
+    <Content>
       <button disabled={!write || isLoading} onClick={() => write!()}>
         {isLoading ? "Minting..." : "Mint now"}
       </button>
@@ -395,7 +395,7 @@ const CardMint: NextPage<CardMintProps> = ({
         <DisplayError error={prepareError || error} />
       )}
       {isSuccess && <h3>Congrats, you sent a WizzmasCard to {recipient}!</h3>}
-    </p>
+    </Content>
   );
 };
 

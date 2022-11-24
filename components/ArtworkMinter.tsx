@@ -38,8 +38,9 @@ const ArtworkTypePicker = ({ onArtworkSelected }: ArtworkTypePickerProps) => {
   }
 
   return (
-    <>
+    <Content>
       Select Artwork:
+      <div>
       <select
         onChange={(e) => {
           const val = parseInt(e.target.value);
@@ -48,10 +49,11 @@ const ArtworkTypePicker = ({ onArtworkSelected }: ArtworkTypePickerProps) => {
         }}
       >
         {range(0, BigNumber.from(numArtworks).toNumber()).map((i) => (
-          <option value={i}> Artwork #{i}</option>
+          <option key={i} value={i}> Artwork #{i}</option>
         ))}
       </select>
-    </>
+      </div>
+    </Content>
   );
 };
 
@@ -105,7 +107,7 @@ const ArtworkMint: NextPage<ArtworkMintProps> = ({
   }
 
   return (
-    <>
+    <Content>
       <button disabled={!write || isLoading} onClick={() => write!()}>
         {isLoading ? "Minting..." : "Mint now"}
       </button>
@@ -113,7 +115,7 @@ const ArtworkMint: NextPage<ArtworkMintProps> = ({
         <DisplayError error={prepareError || error} />
       )}
       {isSuccess && <h3>Congrats, you minted a WizzmasArtwork!</h3>}
-    </>
+    </Content>
   );
 };
 
@@ -141,14 +143,14 @@ const ArtworkClaim: NextPage<ArtworkMintProps> = ({
   }
 
   return (
-    <>
+    <Content>
       <button disabled={!write || isLoading} onClick={() => write!()}>
         {isLoading ? "Claiming..." : "Claim now"}
       </button>
       {(prepareError || error) && (
         <DisplayError error={prepareError || error} />
       )}
-    </>
+    </Content>
   );
 };
 
