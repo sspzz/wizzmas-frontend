@@ -1,3 +1,4 @@
+import { BigNumber } from "ethers";
 import { NextPage } from "next";
 import { createContext, useContext, useState } from "react";
 import styled from "styled-components";
@@ -10,6 +11,7 @@ import {
 } from "wagmi";
 import WizzmasArtworkMinterArtifact from "../contracts/WizzmasArtworkMinter.json";
 import DisplayError from "./DisplayError";
+import { range } from "./lib/ArrayUtil";
 
 type ArtworkTypePickerProps = {
   onArtworkSelected: (artworkType: number) => void;
@@ -39,15 +41,14 @@ const ArtworkTypePicker = ({ onArtworkSelected }: ArtworkTypePickerProps) => {
     <>
       Select Artwork:
       <select
-        // value={`${artworkType}`}
         onChange={(e) => {
           const val = parseInt(e.target.value);
           onArtworkSelected(val);
           setArtworkType(val);
         }}
       >
-        {Array.from(Array(numArtworks).keys()).map((i) => (
-          <option value={i}>{i}</option>
+        {range(0, BigNumber.from(numArtworks).toNumber()).map((i) => (
+          <option value={i}> Artwork #{i}</option>
         ))}
       </select>
     </>
