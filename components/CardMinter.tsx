@@ -38,6 +38,11 @@ import { range } from "./lib/ArrayUtil";
 
 // ===========================================================================
 
+type TokenBalance = {
+  token: number;
+  balance: number;
+};
+
 type WalletArtworkTypePickerProps = {
   address: string;
   onArtworkSelected: (artworkType: number) => void;
@@ -63,7 +68,7 @@ const WalletArtworkTypePicker = ({
     isLoading: isBalancesLoading,
   } = useContractReads({
     contracts:
-      numArtworks != null
+      numArtworks != undefined
         ? range(0, BigNumber.from(numArtworks).toNumber()).map((i) => {
             return {
               addressOrName:
@@ -71,11 +76,30 @@ const WalletArtworkTypePicker = ({
               contractInterface: WizzmasArtworkArtifact.abi,
               functionName: "balanceOf",
               args: [address, i],
+              watch: true
             };
           })
         : [],
     enabled: numArtworks != undefined,
   });
+
+  const [tokenBalances, setTokenBalances] = useState<
+    TokenBalance[] | undefined
+  >(undefined);
+  useEffect(() => {
+    if (balances) {
+      setTokenBalances(
+        balances
+          .map(
+            (balance, i): TokenBalance => ({
+              token: i,
+              balance: balance.toNumber(),
+            })
+          )
+          .filter((tb) => tb.balance > 0)
+      );
+    }
+  }, [balances]);
 
   if (isNumArtworksLoading || isBalancesLoading) {
     return <>Checking wallet...</>;
@@ -86,26 +110,25 @@ const WalletArtworkTypePicker = ({
   }
 
   return (
-    <Content>
-      {balances && (
-        <>
-          Select Artwork:
-          {balances
-            .map((b) => BigNumber.from(b).toNumber())
-            .map((b, i) => (
-              <div
-                key={i}
-                onClick={() => {
-                  if (b > 0) onArtworkSelected(i);
-                }}
-              >
-                Artwork #{i}
-                <img src={`/api/artwork/img/${i}`} />
-              </div>
-            ))}
-        </>
+    <>
+      {tokenBalances && (
+        <Content>
+          <h2>Select Artwork:</h2>
+          {tokenBalances.length == 0 && <>You have no artworks</>}
+          {tokenBalances.map((tb) => (
+            <div
+              key={tb.token}
+              onClick={() => {
+                if (tb.balance > 0) onArtworkSelected(tb.token);
+              }}
+            >
+              Artwork #{tb.token}
+              <img src={`/api/artwork/img/${tb.token}`} />
+            </div>
+          ))}
+        </Content>
       )}
-    </Content>
+    </>
   );
 };
 
@@ -190,7 +213,7 @@ const ERC721Image: NextPage<ERC721ImageProps> = ({
   }
 
   if (imageURL) {
-    return <img src={imageURL} />;
+    return <TokenImage src={imageURL} />;
   } else {
     return <>Missing image</>;
   }
@@ -212,7 +235,9 @@ const WalletERC721TypePicker = ({
   contractAddress,
   onERC721Selected,
 }: WalletERC721PickerProps) => {
-  const [selected, setSelected] = useState<SelectedERC721 | null>(null);
+  const [selected, setSelected] = useState<SelectedERC721 | undefined>(
+    undefined
+  );
 
   const abi = JSON.parse(`
   [
@@ -270,7 +295,7 @@ const WalletERC721TypePicker = ({
     contractInterface: abi,
     functionName: "balanceOf",
     args: [address],
-    enabled: address != null,
+    enabled: address != undefined,
   });
 
   const {
@@ -279,8 +304,8 @@ const WalletERC721TypePicker = ({
     isLoading: isTokensLoading,
   } = useContractReads({
     contracts:
-      balance != null
-        ? Array.from(Array(balance.toNumber()).keys()).map((i) => {
+      balance != undefined
+        ? range(0, balance.toNumber()).map((i) => {
             return {
               addressOrName: contractAddress,
               contractInterface: abi,
@@ -289,7 +314,7 @@ const WalletERC721TypePicker = ({
             };
           })
         : [],
-    enabled: balance != null,
+    enabled: balance != undefined,
   });
 
   const [allTokens, setAllTokens] = useState<SelectedERC721[]>([]);
@@ -309,24 +334,69 @@ const WalletERC721TypePicker = ({
   }
 
   if (isTokensError || isBalanceError) {
-    return <>Could not load NFTs types!</>;
+    return <Content>Could not load NFTs types for {contractAddress}!</Content>;
   }
 
   return (
     <Content>
-      Select NFT:
-      {allTokens.map((token, i) => (
-        <div
-          onClick={() => {
-            onERC721Selected(token);
-          }}
-        >
-          <ERC721Image
-            tokenContract={token.tokenContract}
-            tokenId={token.tokenId}
+      <h3>{contractAddress}:</h3>
+      {allTokens.length == 0 && <>You have no tokens.</>}
+      <TokenGrid>
+        {allTokens.map((token, i) => (
+          <div
+            onClick={() => {
+              onERC721Selected(token);
+            }}
+          >
+            <ERC721Image
+              tokenContract={token.tokenContract}
+              tokenId={token.tokenId}
+            />
+          </div>
+        ))}
+      </TokenGrid>
+    </Content>
+  );
+};
+
+type SupportedERC721sPickerProps = {
+  address: string;
+  onERC721Selected: (selected: SelectedERC721) => void;
+};
+const SupportedERC721sPicker = ({
+  address,
+  onERC721Selected,
+}: SupportedERC721sPickerProps) => {
+  const {
+    data: contracts,
+    isError,
+    isLoading,
+  } = useContractRead({
+    addressOrName: process.env.NEXT_PUBLIC_CARD_CONTRACT_ADDRESS ?? "",
+    contractInterface: WizzmasCardArtifact.abi,
+    functionName: "supportedContracts",
+  });
+
+  if (isLoading) {
+    return <Content>Loading supported NFTs...</Content>;
+  }
+
+  if (isError) {
+    return <>Could not load supported NFTs...</>;
+  }
+
+  return (
+    <Content>
+      <h2>Select NFT:</h2>
+      {contracts &&
+        contracts.map((c, i) => (
+          <WalletERC721TypePicker
+            key={i}
+            address={address}
+            contractAddress={c}
+            onERC721Selected={onERC721Selected}
           />
-        </div>
-      ))}
+        ))}
     </Content>
   );
 };
@@ -339,16 +409,29 @@ type CardMessagePickerProps = {
 const CardMessagePicker = ({
   onCardMessageIdSelected,
 }: CardMessagePickerProps) => {
+  const {
+    data: messages,
+    isError,
+    isLoading,
+  } = useContractRead({
+    addressOrName: process.env.NEXT_PUBLIC_CARD_CONTRACT_ADDRESS ?? "",
+    contractInterface: WizzmasCardArtifact.abi,
+    functionName: "availableMessages",
+  });
+
   return (
     <Content>
-      Select Message:
-      <div
-        onClick={() => {
-          onCardMessageIdSelected(0);
-        }}
-      >
-        Placeholder message content
-      </div>
+      <h2>Select Message:</h2>
+      {messages &&
+        messages.map((message, i) => (
+          <div
+            onClick={() => {
+              onCardMessageIdSelected(i);
+            }}
+          >
+            {message}
+          </div>
+        ))}
     </Content>
   );
 };
@@ -388,6 +471,12 @@ const CardMint: NextPage<CardMintProps> = ({
 
   return (
     <Content>
+      {nftContract && <div>Selected NFT contract: {nftContract}</div>}
+      {nftTokenId && <div>Selected NFT token: {nftTokenId}</div>}
+      {artworkType && <div>Selected artwork id: {artworkType}</div>}
+      {messageId && <div>Selected message id: {messageId}</div>}
+      {recipient && <div>Selected recipient: {recipient}</div>}
+
       <button disabled={!write || isLoading} onClick={() => write!()}>
         {isLoading ? "Minting..." : "Mint now"}
       </button>
@@ -448,10 +537,8 @@ const CardMinter = () => {
           }}
         />
 
-        {/* TODO: get supported contracts */}
-        <WalletERC721TypePicker
+        <SupportedERC721sPicker
           address={address}
-          contractAddress="0x521f9C7505005CFA19A8E5786a9c3c9c9F5e6f42"
           onERC721Selected={(erc721) => {
             setSelectedNFT(erc721);
           }}
@@ -482,6 +569,22 @@ const Content = styled.div`
   border-color: #444;
   padding: 1em;
   margin: 1em;
+`;
+
+const TokenGrid = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: stretch;
+  flex-wrap: wrap;
+  gap: 1em;
+`;
+
+const TokenImage = styled.img`
+  width: 100px;
+  height: 100px;
+  border-style: dashed;
+  border-color: #444;
 `;
 
 export default CardMinter;
