@@ -18,7 +18,8 @@ const DisplayError = ({ error }: Props) => {
       case "INSUFFICIENT_FUNDS":
         return "You do not have enough ETH!";
       case "UNPREDICTABLE_GAS_LIMIT":
-        return error?.reason;
+        // @ts-ignore
+        return error.reason ?? error.code ?? "";
       // TODO: Add errors
       default:
         // @ts-ignore

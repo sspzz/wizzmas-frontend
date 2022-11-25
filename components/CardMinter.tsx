@@ -116,7 +116,7 @@ const WalletArtworkTypePicker = ({
           <h2>Select Artwork:</h2>
           {tokenBalances.length == 0 && <>You have no artworks</>}
           {tokenBalances.map((tb) => (
-            <div
+            <Clickable
               key={tb.token}
               onClick={() => {
                 if (tb.balance > 0) onArtworkSelected(tb.token);
@@ -124,7 +124,7 @@ const WalletArtworkTypePicker = ({
             >
               Artwork #{tb.token}
               <img src={`/api/artwork/img/${tb.token}`} />
-            </div>
+            </Clickable>
           ))}
         </Content>
       )}
@@ -343,7 +343,7 @@ const WalletERC721TypePicker = ({
       {allTokens.length == 0 && <>You have no tokens.</>}
       <TokenGrid>
         {allTokens.map((token, i) => (
-          <div
+          <Clickable
             onClick={() => {
               onERC721Selected(token);
             }}
@@ -352,7 +352,7 @@ const WalletERC721TypePicker = ({
               tokenContract={token.tokenContract}
               tokenId={token.tokenId}
             />
-          </div>
+          </Clickable>
         ))}
       </TokenGrid>
     </Content>
@@ -424,14 +424,14 @@ const CardMessagePicker = ({
       <h2>Select Message:</h2>
       {messages &&
         messages.map((message, i) => (
-          <div
+          <Clickable
             key={i}
             onClick={() => {
               onCardMessageIdSelected(i);
             }}
           >
             {message}
-          </div>
+          </Clickable>
         ))}
     </Content>
   );
@@ -553,10 +553,9 @@ const CardMinter = () => {
   const [selectedArtwork, setSelecteArtwork] = useState<number | undefined>(
     undefined
   );
-  const [selectedNFT, setSelectedNFT] = useState<SelectedERC721 | undefined>({
-    tokenContract: "0x7de11a2d9E9727fa5eAd3094E40211C5e9cf5857",
-    tokenId: 0,
-  });
+  const [selectedNFT, setSelectedNFT] = useState<SelectedERC721 | undefined>(
+    undefined
+  );
   const [selectedMessage, setSelectedMessage] = useState<number | undefined>(
     undefined
   );
@@ -606,6 +605,17 @@ const CardMinter = () => {
     return <p>Mint is closed!</p>;
   }
 };
+
+const Clickable = styled.div`
+  color: yellow;
+  cursor: pointer;
+  border: dashed;
+  border-color: #111;
+  :hover {
+    border: dashed;
+    border-color: yellow;
+  }
+`;
 
 const Content = styled.div`
   border-style: dashed;
