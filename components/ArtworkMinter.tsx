@@ -39,19 +39,22 @@ const ArtworkTypePicker = ({ onArtworkSelected }: ArtworkTypePickerProps) => {
 
   return (
     <Content>
-      Select Artwork:
+      <h2>Select Artwork:</h2>
       <div>
-      <select
-        onChange={(e) => {
-          const val = parseInt(e.target.value);
-          onArtworkSelected(val);
-          setArtworkType(val);
-        }}
-      >
-        {range(0, BigNumber.from(numArtworks).toNumber()).map((i) => (
-          <option key={i} value={i}> Artwork #{i}</option>
-        ))}
-      </select>
+        <select
+          onChange={(e) => {
+            const val = parseInt(e.target.value);
+            onArtworkSelected(val);
+            setArtworkType(val);
+          }}
+        >
+          {range(0, BigNumber.from(numArtworks).toNumber()).map((i) => (
+            <option key={i} value={i}>
+              {" "}
+              Artwork #{i}
+            </option>
+          ))}
+        </select>
       </div>
     </Content>
   );
@@ -194,7 +197,7 @@ const ArtworkMinter: NextPage = () => {
   if (mintEnabled) {
     return (
       <Content>
-        <h2>WizzmasArtwork Mint:</h2>
+        <h2>WizzmasArtwork:</h2>
         <ArtworkTypePicker
           onArtworkSelected={(artworkType) => {
             setArtworkType(artworkType);

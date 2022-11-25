@@ -10,7 +10,7 @@ import {
 } from "wagmi";
 import DisplayError from "./DisplayError";
 import { useEffect, useState } from "react";
-import { BigNumber } from "ethers";
+import { BigNumber, ethers } from "ethers";
 import WizzmasCardArtifact from "../contracts/WizzmasCard.json";
 import WizzmasArtworkArtifact from "../contracts/WizzmasArtwork.json";
 import WizzmasArtworkMinterArtifact from "../contracts/WizzmasArtworkMinter.json";
@@ -76,7 +76,7 @@ const WalletArtworkTypePicker = ({
               contractInterface: WizzmasArtworkArtifact.abi,
               functionName: "balanceOf",
               args: [address, i],
-              watch: true
+              watch: true,
             };
           })
         : [],
@@ -425,6 +425,7 @@ const CardMessagePicker = ({
       {messages &&
         messages.map((message, i) => (
           <div
+            key={i}
             onClick={() => {
               onCardMessageIdSelected(i);
             }}
@@ -432,6 +433,47 @@ const CardMessagePicker = ({
             {message}
           </div>
         ))}
+    </Content>
+  );
+};
+
+// ===========================================================================
+
+type RecipientAddressInputProps = {
+  onRecipientValid: (recipient: string | undefined) => void;
+};
+const RecipientAddressInput = ({
+  onRecipientValid,
+}: RecipientAddressInputProps) => {
+  const [address, setAddress] = useState("");
+  const [validAddress, setValidAddress] = useState(false);
+  const [inputError, setInputError] = useState<Error | null>(null);
+
+  function validate(e: any) {
+    const addr = e.target.value;
+    setAddress(addr);
+    setValidAddress(ethers.utils.isAddress(addr));
+  }
+
+  function addAddress() {
+    setInputError(
+      validAddress && address.length > 0 ? null : Error("Invalid address")
+    );
+    onRecipientValid(validAddress ? address : undefined);
+  }
+
+  return (
+    <Content>
+      <h2>Enter recipient:</h2>
+      <input
+        required
+        value={address}
+        onChange={validate}
+        minLength={42}
+        maxLength={42}
+      />
+      <button onClick={addAddress}>Add</button>
+      <DisplayError error={inputError} />
     </Content>
   );
 };
@@ -457,7 +499,13 @@ const CardMint: NextPage<CardMintProps> = ({
     addressOrName: process.env.NEXT_PUBLIC_CARD_CONTRACT_ADDRESS ?? "",
     contractInterface: WizzmasCardArtifact.abi,
     functionName: "mint",
-    args: [nftContract, nftTokenId, artworkType, messageId, recipient],
+    args: [
+      nftContract ? ethers.utils.getAddress(nftContract) : undefined,
+      nftTokenId,
+      artworkType,
+      messageId,
+      recipient ? ethers.utils.getAddress(recipient) : undefined,
+    ],
   });
   const { data, error, write } = useContractWrite(config);
   const {
@@ -471,11 +519,11 @@ const CardMint: NextPage<CardMintProps> = ({
 
   return (
     <Content>
-      {nftContract && <div>Selected NFT contract: {nftContract}</div>}
-      {nftTokenId && <div>Selected NFT token: {nftTokenId}</div>}
-      {artworkType && <div>Selected artwork id: {artworkType}</div>}
-      {messageId && <div>Selected message id: {messageId}</div>}
-      {recipient && <div>Selected recipient: {recipient}</div>}
+      {nftContract != undefined && <div>Selected contract: {nftContract}</div>}
+      {nftTokenId != undefined && <div>Selected token: {nftTokenId}</div>}
+      {artworkType != undefined && <div>Selected artwork: {artworkType}</div>}
+      {messageId != undefined && <div>Selected message: {messageId}</div>}
+      {recipient != undefined && <div>Selected recipient: {recipient}</div>}
 
       <button disabled={!write || isLoading} onClick={() => write!()}>
         {isLoading ? "Minting..." : "Mint now"}
@@ -505,9 +553,10 @@ const CardMinter = () => {
   const [selectedArtwork, setSelecteArtwork] = useState<number | undefined>(
     undefined
   );
-  const [selectedNFT, setSelectedNFT] = useState<SelectedERC721 | undefined>(
-    undefined
-  );
+  const [selectedNFT, setSelectedNFT] = useState<SelectedERC721 | undefined>({
+    tokenContract: "0x7de11a2d9E9727fa5eAd3094E40211C5e9cf5857",
+    tokenId: 0,
+  });
   const [selectedMessage, setSelectedMessage] = useState<number | undefined>(
     undefined
   );
@@ -528,27 +577,21 @@ const CardMinter = () => {
   if (mintEnabled) {
     return (
       <Content>
-        <h2>WizzmasCard Mint:</h2>
+        <h2>WizzmasCard:</h2>
 
         <WalletArtworkTypePicker
           address={address}
-          onArtworkSelected={(artwork) => {
-            setSelecteArtwork(artwork);
-          }}
+          onArtworkSelected={setSelecteArtwork}
         />
 
         <SupportedERC721sPicker
           address={address}
-          onERC721Selected={(erc721) => {
-            setSelectedNFT(erc721);
-          }}
+          onERC721Selected={setSelectedNFT}
         />
 
-        <CardMessagePicker
-          onCardMessageIdSelected={(m) => {
-            setSelectedMessage(m);
-          }}
-        />
+        <CardMessagePicker onCardMessageIdSelected={setSelectedMessage} />
+
+        <RecipientAddressInput onRecipientValid={setRecipient} />
 
         <CardMint
           artworkType={selectedArtwork}

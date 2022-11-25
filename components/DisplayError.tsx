@@ -18,11 +18,11 @@ const DisplayError = ({ error }: Props) => {
       case "INSUFFICIENT_FUNDS":
         return "You do not have enough ETH!";
       case "UNPREDICTABLE_GAS_LIMIT":
-        return "Unable to estimate gas!";
+        return error?.reason;
       // TODO: Add errors
       default:
         // @ts-ignore
-        return error.code;
+        return error.code ?? error?.reason;
     }
   }
   return <>{error && <ErrorView>{errorMessage()}</ErrorView>}</>;
