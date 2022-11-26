@@ -5,9 +5,9 @@ import { getArtworksContract } from "../../../../contracts/WizzmasArtworkContrac
 import { ethers } from "ethers";
 
 function getProvider() {
-  return new ethers.providers.StaticJsonRpcProvider("http://localhost:8545", {
+  return new ethers.providers.StaticJsonRpcProvider("http://127.0.0.1:8545", {
     name: "Anvil",
-    chainId: 31337,    
+    chainId: 31337,
   });
 }
 
@@ -15,11 +15,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const token = parseInt(req.query.token as string, 10);
   const provider = getProvider();
   const contract = getArtworksContract({ provider: provider });
-  const minted = (await contract.tokenSupply(token)).gt(0);
-  if (!minted) {
+  const available = (await contract.numArtworkTypes()).gt(token);
+  if (!available) {
     return res.status(404).end();
   }
-  const metaPath = path.resolve("../data/artwork", `meta/${token}.json`);
+  const metaPath = path.resolve("./data/artwork", `meta/${token}.json`);
   const json = JSON.parse(fs.readFileSync(metaPath, "utf-8"));
   return res.status(200).end(JSON.stringify(json));
 };

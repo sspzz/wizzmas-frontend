@@ -47,7 +47,7 @@ const { chains, provider, webSocketProvider } = configureChains(
       priority: 0,
       weight: 1,
     }),
-    publicProvider({ priority: 1, weight: 2 }),
+    // publicProvider({ priority: 1, weight: 2 }),
   ]
 );
 

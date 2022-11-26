@@ -2,7 +2,7 @@ import { NextPage } from "next";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useContractRead, useContractReads } from "wagmi";
-import DisplayError from "../DisplayError";
+import DisplayError from "../generic/DisplayError";
 import { range } from "../lib/ArrayUtil";
 import WizzmasCardArtifact from "../../contracts/WizzmasCard.json";
 

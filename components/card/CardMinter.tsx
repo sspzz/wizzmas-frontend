@@ -8,7 +8,7 @@ import {
   usePrepareContractWrite,
   useWaitForTransaction,
 } from "wagmi";
-import DisplayError from "../DisplayError";
+import DisplayError from "../generic/DisplayError";
 import { useEffect, useState } from "react";
 import { BigNumber, ethers } from "ethers";
 import WizzmasCardArtifact from "../../contracts/WizzmasCard.json";

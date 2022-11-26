@@ -5,7 +5,7 @@ import {
   usePrepareContractWrite,
   useWaitForTransaction,
 } from "wagmi";
-import DisplayError from "../DisplayError";
+import DisplayError from "../generic/DisplayError";
 import WizzmasCardArtifact from "../../contracts/WizzmasCard.json";
 
 export type CardMintProps = {

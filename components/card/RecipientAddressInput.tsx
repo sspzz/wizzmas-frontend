@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import { useState } from "react";
-import DisplayError from "../DisplayError";
+import DisplayError from "../generic/DisplayError";
 
 type RecipientAddressInputProps = {
   onRecipientValid: (recipient: string | undefined) => void;
@@ -22,7 +22,9 @@ const RecipientAddressInput = ({
     setInputError(
       validAddress && address.length > 0 ? null : Error("Invalid address")
     );
-    onRecipientValid(validAddress ? ethers.utils.getAddress(address) : undefined);
+    onRecipientValid(
+      validAddress ? ethers.utils.getAddress(address) : undefined
+    );
   }
 
   return (
@@ -35,7 +37,9 @@ const RecipientAddressInput = ({
         minLength={42}
         maxLength={42}
       />
-      <button onClick={addAddress} disabled={!validAddress}>Add</button>
+      <button onClick={addAddress} disabled={!validAddress}>
+        Add
+      </button>
       <DisplayError error={inputError} />
     </>
   );

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import styled from "styled-components";
 import Picker from "../generic/Picker";
 
 type ArtworkTypePickerProps = {
@@ -12,10 +13,10 @@ const ArtworkTypePicker = ({
   const [selected, setSelected] = useState<number | undefined>(undefined);
   const renderItem = (token: number) => {
     return (
-      <>
-        Artwork #{token}
-        <img src={`/api/artwork/img/${token}`} />
-      </>
+      <div>
+        <p>Artwork #{token}</p>
+        <ArtworkImage src={`/api/artwork/img/${token}`} />
+      </div>
     );
   };
 
@@ -28,5 +29,9 @@ const ArtworkTypePicker = ({
     />
   );
 };
+
+const ArtworkImage = styled.img`
+  max-height: 150px;
+`;
 
 export default ArtworkTypePicker;

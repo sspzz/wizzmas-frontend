@@ -5,7 +5,7 @@ import {
   useWaitForTransaction,
 } from "wagmi";
 import WizzmasArtworkMinterArtifact from "../../contracts/WizzmasArtworkMinter.json";
-import DisplayError from "../DisplayError";
+import DisplayError from "../generic/DisplayError";
 import { ArtworkMintProps } from "./ArtworkMint";
 
 const ArtworkClaim: NextPage<ArtworkMintProps> = ({
