@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import ArtworkMinter from "../components/ArtworkMinter";
-import CardMinter from "../components/CardMinter";
+import ArtworkMinter from "../components/artwork/ArtworkMinter";
+import CardMinter from "../components/card/CardMinter";
 import ConnectButton from "../components/ConnectButton";
 
 export default function Home() {
