@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { abi as WizzmasCardAbi } from "./WizzmasCard.json";
+import WizzmasCardAbi from "./WizzmasCard.json";
 
 export function getCardsContract({ provider }: { provider: any }) {
   if (!process.env.NEXT_PUBLIC_CARD_CONTRACT_ADDRESS) {
@@ -7,7 +7,7 @@ export function getCardsContract({ provider }: { provider: any }) {
   }
   return new ethers.Contract(
     process.env.NEXT_PUBLIC_CARD_CONTRACT_ADDRESS,
-    WizzmasCardAbi,
+    WizzmasCardAbi.abi,
     provider
   );
 }
