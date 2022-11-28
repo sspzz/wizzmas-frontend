@@ -14,7 +14,7 @@ import { BigNumber, ethers } from "ethers";
 import WizzmasCardArtifact from "../../contracts/WizzmasCard.json";
 import WizzmasArtworkArtifact from "../../contracts/WizzmasArtwork.json";
 import WizzmasArtworkMinterArtifact from "../../contracts/WizzmasArtworkMinter.json";
-import { range } from "../lib/ArrayUtil";
+import { range } from "../../lib/ArrayUtil";
 import WalletArtworkTypePicker from "./WalletArtworkTypePicker";
 import SupportedERC721sPicker, { SelectedERC721 } from "./SupportedERC721sPicker";
 import CardMessagePicker from "./CardMessagePicker";

@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { abi as WizzmasArtworkMinterAbi } from "./WizzmasArtworkMinter.json";
+import WizzmasArtworkMinterAbi from "./WizzmasArtworkMinter.json";
 
 export function getArtworkMinterContract({ provider }: { provider: any }) {
   if (!process.env.NEXT_PUBLIC_ARTWORKMINTER_CONTRACT_ADDRESS) {
@@ -7,7 +7,7 @@ export function getArtworkMinterContract({ provider }: { provider: any }) {
   }
   return new ethers.Contract(
     process.env.NEXT_PUBLIC_ARTWORKMINTER_CONTRACT_ADDRESS,
-    WizzmasArtworkMinterAbi,
+    WizzmasArtworkMinterAbi.abi,
     provider
   );
 }

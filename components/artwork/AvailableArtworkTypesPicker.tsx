@@ -3,7 +3,7 @@ import { NextPage } from "next";
 import { useState } from "react";
 import { useContractRead } from "wagmi";
 import WizzmasArtworkMinterArtifact from "../../contracts/WizzmasArtworkMinter.json";
-import { range } from "../lib/ArrayUtil";
+import { range } from "../../lib/ArrayUtil";
 import ArtworkTypePicker from "./ArtworkTypePicker";
 
 type AvailableArtworkTypesProps = {

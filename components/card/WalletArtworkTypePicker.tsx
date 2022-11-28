@@ -1,7 +1,7 @@
 import { BigNumber } from "ethers";
 import { useEffect, useState } from "react";
 import { useContractRead, useContractReads } from "wagmi";
-import { range } from "../lib/ArrayUtil";
+import { range } from "../../lib/ArrayUtil";
 import WizzmasArtworkArtifact from "../../contracts/WizzmasArtwork.json";
 import WizzmasArtworkMinterArtifact from "../../contracts/WizzmasArtworkMinter.json";
 import Picker from "../generic/Picker";

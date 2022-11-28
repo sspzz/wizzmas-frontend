@@ -1,10 +1,11 @@
 import { NextPage } from "next";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useContractRead, useContractReads } from "wagmi";
+import { useContractRead, useContractReads, useProvider } from "wagmi";
 import DisplayError from "../generic/DisplayError";
-import { range } from "../lib/ArrayUtil";
+import { range } from "../../lib/ArrayUtil";
 import WizzmasCardArtifact from "../../contracts/WizzmasCard.json";
+import { fetchArtwork, fetchERC721Artwork } from "../../lib/TokenArtwork";
 
 interface ERC721ImageProps {
   tokenContract: string;
@@ -15,73 +16,29 @@ const ERC721Image: NextPage<ERC721ImageProps> = ({
   tokenContract,
   tokenId,
 }: ERC721ImageProps) => {
-  const abi = JSON.parse(`
-    [
-      {
-        "inputs": [
-          {
-            "internalType": "uint256",
-            "name": "tokenId",
-            "type": "uint256"
-          }
-        ],
-        "name": "tokenURI",
-        "outputs": [
-          {
-            "internalType": "string",
-            "name": "",
-            "type": "string"
-          }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-      }
-    ]`);
-
-  const {
-    data: tokenURI,
-    isError: isTokenURIError,
-    isLoading: istokenURILoading,
-    error: tokenURIError,
-  } = useContractRead({
-    addressOrName: tokenContract,
-    contractInterface: abi,
-    functionName: "tokenURI",
-    args: [tokenId],
-  });
-
+  const provider = useProvider();
   const [imageURL, setImageURL] = useState<string | undefined>(undefined);
   const [isLoadingImageURL, setIsLoadingImageURL] = useState(false);
   const [isLoadingImageURLError, setIsLoadingImageURLError] =
     useState<Error | null>(null);
 
-  function ipfs(url: string): string {
-    return url.startsWith("ipfs://")
-      ? `https://cloudflare-ipfs.com/ipfs/${url.replace("ipfs://", "")}`
-      : url;
-  }
-
   useEffect(() => {
-    if (tokenURI) {
-      const uri = tokenURI!.toString();
-      setIsLoadingImageURL(true);
-      fetch(ipfs(uri))
-        .then((res) => res?.json())
-        .then((data: any) => setImageURL(ipfs(data.image)))
-        .then(() => setIsLoadingImageURL(false))
-        .catch((e) => {
-          setIsLoadingImageURL(false);
-          setIsLoadingImageURLError(e);
-        });
-    }
-  }, [tokenURI]);
+    setIsLoadingImageURL(true);
+    fetchERC721Artwork(tokenContract, tokenId, provider)
+      .then((url: string) => setImageURL(url))
+      .then(() => setIsLoadingImageURL(false))
+      .catch((e) => {
+        setIsLoadingImageURL(false);
+        setIsLoadingImageURLError(e);
+      });
+  }, []);
 
-  if (istokenURILoading || isLoadingImageURL) {
+  if (isLoadingImageURL) {
     return <>Loading..</>;
   }
 
-  if (isTokenURIError || isLoadingImageURLError) {
-    return <DisplayError error={tokenURIError || isLoadingImageURLError} />;
+  if (isLoadingImageURLError) {
+    return <DisplayError error={isLoadingImageURLError} />;
   }
 
   if (imageURL) {
