@@ -16,8 +16,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(404).end();
   }
 
-  const contract = getCardsContract({ provider: getProvider() });
   try {
+    const contract = getCardsContract({ provider: getProvider() });
     const mintedCard = await contract.getCard(token);
 
     const artworkMeta = await fetch(
