@@ -26,9 +26,9 @@ const CardMessagePicker = ({
 
   return (
     <>
+      <h3>Select Message:</h3>
       {messages && (
         <Picker
-          itemName="Message"
           items={messages.map((message, i) => i)}
           renderItem={renderItem}
           onSelected={onCardMessageIdSelected}

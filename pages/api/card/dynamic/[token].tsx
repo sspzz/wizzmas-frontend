@@ -27,6 +27,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       process.env.VERCEL_URL ?? "http://localhost:3000"
     }/api/card/img/${mintedCard.card}`;
 
+    console.log(backUrl);
+
     const content = `
         <!DOCTYPE html>
         <html>
@@ -77,7 +79,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             color: white;
             transform: rotateY(180deg);
         }
-        </style><head>
+        </style>
+        <head>
         <body>
         <div class="flip-card">
         <div class="flip-card-inner">

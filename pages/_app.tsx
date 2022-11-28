@@ -32,13 +32,13 @@ const localChain: Chain = {
   testnet: true,
 };
 const { chains, provider, webSocketProvider } = configureChains(
-  [chain.mainnet, localChain],
+  [/*chain.mainnet,*/ localChain],
   [
-    alchemyProvider({
-      apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY ?? "",
-      priority: 0,
-      weight: 1,
-    }),
+    // alchemyProvider({
+    //   apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY ?? "",
+    //   priority: 0,
+    //   weight: 1,
+    // }),
     jsonRpcProvider({
       rpc: (chain) => {
         if (chain.id !== localChain.id) return null;

@@ -21,12 +21,14 @@ const ArtworkTypePicker = ({
   };
 
   return (
+    <>
+    <h3>Select Artwork:</h3>
     <Picker
-      itemName="Artwork"
       items={artworks}
       renderItem={renderItem}
       onSelected={onArtworkSelected}
     />
+    </>
   );
 };
 

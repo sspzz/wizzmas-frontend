@@ -2,18 +2,15 @@ import { ReactNode, useState } from "react";
 import styled from "styled-components";
 
 type PickerProps = {
-  itemName: string;
   items: any[];
   renderItem: (item: any) => ReactNode;
   onSelected: (selected: any) => void;
 };
-const Picker = ({ itemName, items, renderItem, onSelected }: PickerProps) => {
+const Picker = ({ items, renderItem, onSelected }: PickerProps) => {
   const [selected, setSelected] = useState<any | undefined>(undefined);
 
   return (
     <>
-      <h2>Select {itemName}:</h2>
-      {items.length == 0 && <>No {itemName}s</>}
       {items.map((item) => (
         <div
           onClick={() => {

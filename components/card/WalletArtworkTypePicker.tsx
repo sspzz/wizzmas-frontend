@@ -52,7 +52,6 @@ const WalletArtworkTypePicker = ({
     enabled: numArtworks != undefined,
   });
 
-  const [artworkType, setArtworkType] = useState<number | undefined>(undefined);
   const [tokenBalances, setTokenBalances] = useState<
     TokenBalance[] | undefined
   >(undefined);
@@ -71,15 +70,6 @@ const WalletArtworkTypePicker = ({
     }
   }, [balances]);
 
-  const renderItem = (token: number) => {
-    return (
-      <>
-        Artwork #{token}
-        <img src={`/api/artwork/img/${token}`} />
-      </>
-    );
-  };
-
   if (isNumArtworksLoading || isBalancesLoading) {
     return <>Checking wallet...</>;
   }
@@ -91,12 +81,15 @@ const WalletArtworkTypePicker = ({
   return (
     <>
       {tokenBalances && (
-        <ArtworkTypePicker
-          artworks={tokenBalances
-            .filter((tb) => tb.balance > 0)
-            .map((tb) => tb.token)}
-          onArtworkSelected={onArtworkSelected}
-        />
+        <>
+          <ArtworkTypePicker
+            artworks={tokenBalances
+              .filter((tb) => tb.balance > 0)
+              .map((tb) => tb.token)}
+            onArtworkSelected={onArtworkSelected}
+          />
+          {tokenBalances.length == 0 && <>You have no tokens.</>}
+        </>
       )}
     </>
   );
