@@ -7,7 +7,7 @@ import {
 } from "wagmi";
 import DisplayError from "../generic/DisplayError";
 import WizzmasCardArtifact from "../../contracts/WizzmasCard.json";
-import { PrimaryButton } from "../generic/StyledComponents";
+import { PrimaryButton, SmallTitle } from "../generic/StyledComponents";
 
 export type CardMintProps = {
   nftContract: string | undefined;
@@ -60,7 +60,11 @@ const CardMint: NextPage<CardMintProps> = ({
       {(prepareError || error) && (
         <DisplayError error={prepareError || error} />
       )}
-      {isSuccess && <h3>Congrats, you sent a WizzmasCard to {recipient}!</h3>}
+      {isSuccess && (
+        <SmallTitle>
+          Congrats, you sent a WizzmasCard to {recipient}!
+        </SmallTitle>
+      )}
     </>
   );
 };

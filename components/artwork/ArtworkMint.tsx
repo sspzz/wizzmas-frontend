@@ -7,25 +7,14 @@ import {
 } from "wagmi";
 import WizzmasArtworkMinterArtifact from "../../contracts/WizzmasArtworkMinter.json";
 import DisplayError from "../generic/DisplayError";
-import { PrimaryButton } from "../generic/StyledComponents";
+import { PrimaryButton, SmallTitle } from "../generic/StyledComponents";
 
 export type ArtworkMintProps = {
-  artworkType: number;
+  artworkType: number | undefined;
 };
 const ArtworkMint: NextPage<ArtworkMintProps> = ({
   artworkType,
 }: ArtworkMintProps) => {
-  const {
-    data: tokenFrozen,
-    isError: isTokenFrozenError,
-    isLoading: isTokenFrozenLoading,
-  } = useContractRead({
-    addressOrName: process.env.NEXT_PUBLIC_ARTWORKMINTER_CONTRACT_ADDRESS ?? "",
-    contractInterface: WizzmasArtworkMinterArtifact.abi,
-    functionName: "tokenFrozen",
-    args: [artworkType],
-  });
-
   const {
     data: mintPrice,
     isError: isPriceError,
@@ -53,7 +42,7 @@ const ArtworkMint: NextPage<ArtworkMintProps> = ({
     hash: data?.hash,
   });
 
-  if (isPriceLoading || isTokenFrozenLoading) {
+  if (isPriceLoading) {
     return <></>;
   }
 
@@ -65,7 +54,7 @@ const ArtworkMint: NextPage<ArtworkMintProps> = ({
       {(prepareError || error) && (
         <DisplayError error={prepareError || error} />
       )}
-      {isSuccess && <h3>Congrats, you minted a WizzmasArtwork!</h3>}
+      {isSuccess && <SmallTitle>Congrats, you minted a WizzmasArtwork!</SmallTitle>}
     </>
   );
 };

@@ -6,7 +6,7 @@ import {
 } from "wagmi";
 import WizzmasArtworkMinterArtifact from "../../contracts/WizzmasArtworkMinter.json";
 import DisplayError from "../generic/DisplayError";
-import { PrimaryButton } from "../generic/StyledComponents";
+import { PrimaryButton, SmallTitle } from "../generic/StyledComponents";
 import { ArtworkMintProps } from "./ArtworkMint";
 
 const ArtworkClaim: NextPage<ArtworkMintProps> = ({
@@ -29,7 +29,9 @@ const ArtworkClaim: NextPage<ArtworkMintProps> = ({
   });
 
   if (isSuccess) {
-    return <h3>Congrats, you claimed a free WizzmasArtwork!</h3>;
+    return (
+      <SmallTitle>Congrats, you claimed a free WizzmasArtwork!</SmallTitle>
+    );
   }
 
   return (

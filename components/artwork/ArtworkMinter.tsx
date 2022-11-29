@@ -7,9 +7,15 @@ import ArtworkTypePicker from "./AvailableArtworkTypesPicker";
 import ArtworkClaim from "./ArtworkClaim";
 import ArtworkMint from "./ArtworkMint";
 import AvailableArtworkTypesPicker from "./AvailableArtworkTypesPicker";
+import {
+  MediumTitle,
+  Segment,
+  SmallTitle,
+  VStack,
+} from "../generic/StyledComponents";
 
 const ArtworkMinter: NextPage = () => {
-  const [artworkType, setArtworkType] = useState<number>(0);
+  const [artworkType, setArtworkType] = useState<number | undefined>(undefined);
 
   const { address } = useAccount();
   const {
@@ -34,24 +40,28 @@ const ArtworkMinter: NextPage = () => {
   });
 
   if (!address) {
-    return <h3>Connect wallet to mint!</h3>;
+    return <SmallTitle>Connect wallet to mint!</SmallTitle>;
   }
 
   if (isMintEnabledLoading || isCanClaimLoading) {
-    return <h2>Loading...</h2>;
+    return <SmallTitle>Loading...</SmallTitle>;
   }
 
   if (isMintEnabledError) {
-    return <h3>Could not read contract information!</h3>;
+    return <SmallTitle>Could not read contract information!</SmallTitle>;
   }
 
   if (mintEnabled) {
     return (
       <Content>
-        <h2>WizzmasArtwork:</h2>
-        <AvailableArtworkTypesPicker onArtworkSelected={setArtworkType} />
-        {canClaim && <ArtworkClaim artworkType={artworkType} />}
-        {!canClaim && <ArtworkMint artworkType={artworkType} />}
+        <VStack>
+          <MediumTitle>Wizzmas Artwork</MediumTitle>
+          <Content>
+            <AvailableArtworkTypesPicker onArtworkSelected={setArtworkType} />
+          </Content>
+          {canClaim && <ArtworkClaim artworkType={artworkType} />}
+          {/* {!canClaim && <ArtworkMint artworkType={artworkType} />} */}
+        </VStack>
       </Content>
     );
   } else {

@@ -16,10 +16,13 @@ import WizzmasArtworkArtifact from "../../contracts/WizzmasArtwork.json";
 import WizzmasArtworkMinterArtifact from "../../contracts/WizzmasArtworkMinter.json";
 import { range } from "../../lib/ArrayUtil";
 import WalletArtworkTypePicker from "./WalletArtworkTypePicker";
-import SupportedERC721sPicker, { SelectedERC721 } from "./SupportedERC721sPicker";
+import SupportedERC721sPicker, {
+  SelectedERC721,
+} from "./SupportedERC721sPicker";
 import MessagePicker from "./MessagePicker";
 import RecipientAddressInput from "./RecipientAddressInput";
 import CardMint from "./CardMint";
+import { MediumTitle, SmallTitle, VStack } from "../generic/StyledComponents";
 
 // TODO:
 // 1. - Get connected wallet Artworks
@@ -75,45 +78,45 @@ const CardMinter = () => {
   const [recipient, setRecipient] = useState<string | undefined>(undefined);
 
   if (!address) {
-    return <h3>Connect wallet to mint!</h3>;
+    return <SmallTitle>Connect wallet to mint!</SmallTitle>;
   }
 
   if (isLoading) {
-    return <h2>Loading...</h2>;
+    return <SmallTitle>Loading...</SmallTitle>;
   }
 
   if (isError) {
-    return <h3>Could not read contract information!</h3>;
+    return <SmallTitle>Could not read contract information!</SmallTitle>;
   }
 
   if (mintEnabled) {
     return (
       <Content>
-        <h2>WizzmasCard:</h2>
+        <VStack>
+          <MediumTitle>Wizzmas Cards</MediumTitle>
 
-        <Content>
-          <WalletArtworkTypePicker
-            address={address}
-            onArtworkSelected={setSelecteArtwork}
-          />
-        </Content>
+          <Content>
+            <WalletArtworkTypePicker
+              address={address}
+              onArtworkSelected={setSelecteArtwork}
+            />
+          </Content>
 
-        <Content>
-          <SupportedERC721sPicker
-            address={address}
-            onERC721Selected={setSelectedNFT}
-          />
-        </Content>
+          <Content>
+            <SupportedERC721sPicker
+              address={address}
+              onERC721Selected={setSelectedNFT}
+            />
+          </Content>
 
-        <Content>
-          <MessagePicker onCardMessageIdSelected={setSelectedMessage} />
-        </Content>
+          <Content>
+            <MessagePicker onCardMessageIdSelected={setSelectedMessage} />
+          </Content>
 
-        <Content>
-          <RecipientAddressInput onRecipientValid={setRecipient} />
-        </Content>
+          <Content>
+            <RecipientAddressInput onRecipientValid={setRecipient} />
+          </Content>
 
-        <Content>
           <CardMint
             artworkType={selectedArtwork}
             messageId={selectedMessage}
@@ -121,7 +124,7 @@ const CardMinter = () => {
             nftTokenId={selectedNFT?.tokenId}
             recipient={recipient}
           />
-        </Content>
+        </VStack>
       </Content>
     );
   } else {

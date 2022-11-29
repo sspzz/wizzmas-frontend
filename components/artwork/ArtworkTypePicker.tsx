@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Picker from "../generic/Picker";
+import { HStack, SmallTitle } from "../generic/StyledComponents";
 
 type ArtworkTypePickerProps = {
   artworks: number[];
@@ -22,26 +23,17 @@ const ArtworkTypePicker = ({
 
   return (
     <div>
-      <h3>Select Artwork:</h3>
-      <Grid>
+      <SmallTitle>Select Artwork:</SmallTitle>
+      <HStack>
         <Picker
           items={artworks}
           renderItem={renderItem}
           onSelected={onArtworkSelected}
         />
-      </Grid>
+      </HStack>
     </div>
   );
 };
-
-const Grid = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: start;
-  align-content: stretch;
-  flex-wrap: wrap;
-  gap: 1em;
-`;
 
 const Item = styled.div`
   width: 145px;

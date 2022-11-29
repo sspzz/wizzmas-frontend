@@ -1,8 +1,13 @@
 import { ethers } from "ethers";
 import { useState } from "react";
-import styled from "styled-components";
 import DisplayError from "../generic/DisplayError";
-import { Button, Segment, TextInput, VStack } from "../generic/StyledComponents";
+import {
+  Button,
+  MediumTitle,
+  Segment,
+  TextInput,
+  VStack,
+} from "../generic/StyledComponents";
 
 type RecipientAddressInputProps = {
   onRecipientValid: (recipient: string | undefined) => void;
@@ -31,7 +36,7 @@ const RecipientAddressInput = ({
 
   return (
     <>
-      <h2>Enter recipient:</h2>
+      <MediumTitle>Enter recipient:</MediumTitle>
       <VStack>
         <Segment>
           <TextInput
@@ -51,6 +56,5 @@ const RecipientAddressInput = ({
     </>
   );
 };
-
 
 export default RecipientAddressInput;

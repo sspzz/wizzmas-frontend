@@ -5,6 +5,7 @@ import WizzmasCardArtifact from "../../contracts/WizzmasCard.json";
 import { BigNumber } from "ethers";
 import { getNFTs } from "../../lib/AlchemyUtil";
 import Picker from "../generic/Picker";
+import { HStack, SmallTitle } from "../generic/StyledComponents";
 
 export interface SelectedERC721 {
   tokenContract: string;
@@ -55,21 +56,21 @@ const SupportedERC721sPicker = ({
   };
 
   if (isLoading) {
-    return <>Loading supported NFTs...</>;
+    return <SmallTitle>Loading supported NFTs...</SmallTitle>;
   }
 
   if (isError) {
-    return <>Could not load supported NFTs...</>;
+    return <SmallTitle>Could not load supported NFTs...</SmallTitle>;
   }
 
   if (ownedNFTsError) {
-    return <>Could not load wallet NFTs...</>;
+    return <SmallTitle>Could not load wallet NFTs...</SmallTitle>;
   }
 
   return (
     <div>
-      <h3>Select NFT:</h3>
-      <TokenGrid>
+      <SmallTitle>Select NFT:</SmallTitle>
+      <HStack>
         {ownedNFTs && (
           <>
             <Picker
@@ -86,19 +87,10 @@ const SupportedERC721sPicker = ({
             {ownedNFTs.length == 0 && <>You have no tokens.</>}
           </>
         )}
-      </TokenGrid>
+      </HStack>
     </div>
   );
 };
-
-const TokenGrid = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: start;
-  align-content: stretch;
-  flex-wrap: wrap;
-  gap: 1em;
-`;
 
 const Item = styled.div`
   width: 150px;

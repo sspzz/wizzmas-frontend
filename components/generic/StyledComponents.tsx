@@ -1,5 +1,17 @@
 import styled from "styled-components";
 
+export const LargeTitle = styled.h1`
+  color: yellow;
+`;
+
+export const MediumTitle = styled.h2`
+  color: white;
+`;
+
+export const SmallTitle = styled.h3`
+  color: white;
+`;
+
 export const VStack = styled.div`
   display: flex;
   flex-direction: column;
@@ -34,6 +46,7 @@ export const PrimaryButton = styled.button`
   padding: 0.5em;
   flex-grow: 1;
   color: black;
+  border: none;
   background-color: yellow;
   :hover {
     background-color: orange;
@@ -42,7 +55,8 @@ export const PrimaryButton = styled.button`
     background-color: red;
   }
   :disabled {
-    background-color: gray;
+    color: gray;
+    background-color: darkgray;
   }
 `;
 
@@ -53,6 +67,7 @@ export const Button = styled.button`
   padding: 0.5em;
   flex-grow: 1;
   color: black;
+  border: none;
   background-color: yellow;
   :hover {
     background-color: orange;
@@ -61,7 +76,8 @@ export const Button = styled.button`
     background-color: red;
   }
   :disabled {
-    background-color: gray;
+    color: gray;
+    background-color: darkgray;
   }
 `;
 

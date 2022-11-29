@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useContractRead } from "wagmi";
 import WizzmasCardArtifact from "../../contracts/WizzmasCard.json";
 import Picker from "../generic/Picker";
+import { SmallTitle, VStack } from "../generic/StyledComponents";
 
 type MessagePickerProps = {
   onCardMessageIdSelected: (messageId: number) => void;
@@ -38,8 +39,8 @@ const MessagePicker = ({ onCardMessageIdSelected }: MessagePickerProps) => {
 
   return (
     <>
-      <h3>Select Message:</h3>
-      <Grid>
+      <SmallTitle>Select Message:</SmallTitle>
+      <VStack>
         {messages && (
           <Picker
             items={messages.map((message, i) => i)}
@@ -47,19 +48,10 @@ const MessagePicker = ({ onCardMessageIdSelected }: MessagePickerProps) => {
             onSelected={onCardMessageIdSelected}
           />
         )}
-      </Grid>
+      </VStack>
     </>
   );
 };
-
-const Grid = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  align-content: stretch;
-  flex-wrap: wrap;
-  gap: 1em;
-`;
 
 const Item = styled.div`
 `;
