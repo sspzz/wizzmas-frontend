@@ -83,6 +83,7 @@ export const Button = styled.button`
 
 export const TextInput = styled.input`
   font-family: Alagard;
+  font-size: 1em;
   width: 100%;
   padding: 1em;
   background: #00000000;
