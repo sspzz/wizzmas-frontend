@@ -17,16 +17,20 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(404).end();
   }
 
-  const contract = getCardsContract({ provider: getProvider() });
   try {
+    const contract = getCardsContract({ provider: getProvider() });
     const mintedCard = await contract.getCard(token);
     const tokenImageURL = await fetchERC721Artwork(
       mintedCard.tokenContract,
       mintedCard.token,
       getProvider()
     );
+    const artworkImageURL = `${
+      process.env.VERCEL_URL ?? "http://localhost:3000"
+    }/api/artwork/img/${mintedCard.artwork}`;
+
     const imageBuffer = await card({
-      artwork: mintedCard.artwork,
+      artworkImageUrl: artworkImageURL,
       senderImageUrl: tokenImageURL,
       message: mintedCard.message,
     });

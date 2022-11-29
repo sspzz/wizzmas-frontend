@@ -1,6 +1,7 @@
 import { ethers } from "ethers";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getERC721Contract } from "../../../../contracts/ERC721Contract";
+import { getArtworkMinterContract } from "../../../../contracts/WizzmasArtworkMinterContract";
 import { card } from "../../../../lib/ImageUtil";
 import { fetchERC721Artwork } from "../../../../lib/TokenArtwork";
 
@@ -17,31 +18,34 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const tokenContract = req.query.contract as string;
   const message = req.query.message as string;
 
-  if (
-    token == undefined ||
-    artwork == undefined ||
-    tokenContract == undefined ||
-    message == undefined
-  ) {
-    return res.status(404).end();
+  const provider = getProvider();
+
+  var artworkImageURL = undefined;
+  if (artwork) {
+    const contract = getArtworkMinterContract({ provider: provider });
+    const available = (await contract.numArtworkTypes()).gt(artwork);
+    if (!available) {
+      return res.status(404).end();
+    }
+    artworkImageURL = `${
+      process.env.VERCEL_URL ?? "http://localhost:3000"
+    }/api/artwork/img/${artwork}`;
   }
-  const contract = getERC721Contract({
-    address: tokenContract,
-    provider: getProvider(),
-  });
-  const tokenImageURL = await fetchERC721Artwork(
-    tokenContract,
-    token,
-    getProvider()
-  );
+
+  var tokenImageURL = undefined;
+  if (tokenContract && token) {
+    tokenImageURL = await fetchERC721Artwork(tokenContract, token, provider);
+  }
+
   const imageBuffer = await card({
-    artwork: artwork,
+    artworkImageUrl: artworkImageURL,
     senderImageUrl: tokenImageURL,
     message: message,
   });
   if (!imageBuffer) {
     return res.status(404).end();
   }
+
   res.setHeader("Content-Type", "image/png");
   res.setHeader(
     "Cache-Control",

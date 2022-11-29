@@ -23,76 +23,107 @@ async function urlToBuffer(url: string): Promise<Buffer> {
 }
 
 export type CardParams = {
-  artwork: number;
-  senderImageUrl: string;
-  message: string;
+  artworkImageUrl: string | undefined;
+  senderImageUrl: string | undefined;
+  message: string | undefined;
   width?: number;
   height?: number;
 };
 export async function card({
-  artwork,
+  artworkImageUrl,
   senderImageUrl,
   message,
   width = 1080,
   height = 432,
 }: CardParams) {
   try {
+    const overlays: any[] = [];
+
+    // Background
+    const background = await sharp({
+      create: {
+        width: width,
+        height: height,
+        channels: 4,
+        background: { r: 0, g: 0, b: 0, alpha: 0 },
+      },
+    }).png();
+
+    // Artwork
+    var artwork = undefined;
+    if (artworkImageUrl) {
+      artwork = await sharp(await urlToBuffer(artworkImageUrl))
+      .resize(width, height)
+        .png()
+        .toBuffer();
+    }
+
+    // Sender NFT
+    var senderImage = undefined;
+    const senderImageSize = { width: height * 0.8, height: height * 0.8 };
+    if (senderImageUrl) {
+      senderImage = await sharp(await urlToBuffer(senderImageUrl))
+        .resize(
+          Math.floor(senderImageSize.width),
+          Math.floor(senderImageSize.height),
+          {
+            kernel: sharp.kernel.nearest,
+            fit: "contain",
+            position: "right top",
+            background: { r: 0, g: 0, b: 0, alpha: 0 },
+          }
+        )
+        .png()
+        .toBuffer();
+    }
+
+    // Message
+    var textOverlay = undefined;
     const textHeight = height / 2;
     const textWidth = width / 2;
     const textPadding = {
       top: height * (5 / 24),
       left: width * (29 / 60),
     };
-    const text = {
-      text: {
-        text: message,
-        width: textWidth,
-        height: textHeight,
-        align: "center",
-        font: "Alagard",
-        fontfile: path.resolve("./fonts", "alagard/alagard.ttf"),
-        rgba: true,
-      },
-    };
-    let textOverlay = await sharp(text).png().toBuffer();
+    if (message) {
+      const text = {
+        text: {
+          text: message,
+          width: textWidth,
+          height: textHeight,
+          align: "center",
+          font: "Alagard",
+          fontfile: path.resolve("./fonts", "alagard/alagard.ttf"),
+          rgba: true,
+        },
+      };
+      textOverlay = await sharp(text).png().toBuffer();
+    }
 
-    const background = await sharp({
-      create: {
-        width: width,
-        height: height,
-        channels: 4,
-        background: { r: 66, g: 66, b: 66, alpha: 1 },
-      },
-    }).png();
-
-    const senderImageSize = { width: height * 0.8, height: height * 0.8 };
-    const senderImage = await sharp(await urlToBuffer(senderImageUrl))
-      .resize(
-        Math.floor(senderImageSize.width),
-        Math.floor(senderImageSize.height),
-        {
-          kernel: sharp.kernel.nearest,
-          fit: "contain",
-          position: "right top",
-          background: { r: 0, g: 0, b: 0, alpha: 0 },
-        }
-      )
-      .png()
-      .toBuffer();
-
+    // Compose
+    if (artwork) {
+      overlays.push({
+        input: artwork,
+        top: 0,
+        left: 0,
+      });
+    }
+    if (senderImage) {
+      overlays.push({
+        input: senderImage,
+        top: Math.floor((height - senderImageSize.height) / 2),
+        left: Math.floor((height - senderImageSize.height) / 2),
+      });
+    }
+    if (textOverlay) {
+      overlays.push({
+        input: textOverlay,
+        top: textPadding.top,
+        left: textPadding.left,
+      });
+    }
     return background
-      .composite([
-        {
-          input: senderImage,
-          top: Math.floor((height - senderImageSize.height) / 2),
-          left: Math.floor((height - senderImageSize.height) / 2),
-        },
-        {
-          input: textOverlay,
-          top: textPadding.top,
-          left: textPadding.left,
-        },
-      ])
+      .composite(overlays)
       .toBuffer()
       .then((data: any) => sharp(data).png().toBuffer());
   } catch (error) {

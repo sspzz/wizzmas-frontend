@@ -27,8 +27,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       process.env.VERCEL_URL ?? "http://localhost:3000"
     }/api/card/img/${mintedCard.card}`;
 
-    console.log(backUrl);
-
     const content = `
         <!DOCTYPE html>
         <html>
