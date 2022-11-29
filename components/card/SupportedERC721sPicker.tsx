@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useContractRead, useContractReads, useProvider } from "wagmi";
+import { useContractRead } from "wagmi";
 import WizzmasCardArtifact from "../../contracts/WizzmasCard.json";
-import { BigNumber, Contract } from "ethers";
+import { BigNumber } from "ethers";
 import { getNFTs } from "../../lib/AlchemyUtil";
 import Picker from "../generic/Picker";
 
@@ -108,6 +108,7 @@ const Item = styled.div`
 const TokenTextWrapper = styled.div`
   padding: 0.2em;
 `;
+
 const TokenText = styled.p`
   text-align: center;
   font-size: 0.9em;

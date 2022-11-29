@@ -1,4 +1,3 @@
-import { useState } from "react";
 import styled from "styled-components";
 import Picker from "../generic/Picker";
 
@@ -13,14 +12,16 @@ const ArtworkTypePicker = ({
   const renderItem = (token: number) => {
     return (
       <Item>
-        <p>Artwork #{token}</p>
-        <ArtworkImage src={`/api/artwork/img/${token}`} />
+        <Image src={`/api/artwork/img/${token}`} />
+        <TextWrapper>
+          <Text>Artwork #{token}</Text>
+        </TextWrapper>
       </Item>
     );
   };
 
   return (
-    <>
+    <div>
       <h3>Select Artwork:</h3>
       <Grid>
         <Picker
@@ -29,7 +30,7 @@ const ArtworkTypePicker = ({
           onSelected={onArtworkSelected}
         />
       </Grid>
-    </>
+    </div>
   );
 };
 
@@ -43,11 +44,28 @@ const Grid = styled.div`
 `;
 
 const Item = styled.div`
+  width: 145px;
+  height: 250px;
 `;
 
-const ArtworkImage = styled.img`
-  max-width: 250px;
-  max-height: 250px;
+const TextWrapper = styled.div`
+  padding: 0.2em;
+`;
+
+const Text = styled.p`
+  text-align: center;
+  font-size: 0.9em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  display: block;
+  line-height: 1em;
+  max-height: 2em; /* number of lines to show  */
+`;
+
+const Image = styled.img`
+  max-width: 100%;
+  max-height: 100%;
   object-fit: contain;
 `;
 
