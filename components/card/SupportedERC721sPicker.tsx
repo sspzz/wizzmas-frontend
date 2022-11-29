@@ -31,18 +31,27 @@ const SupportedERC721sPicker = ({
   });
 
   const [ownedNFTs, setOwnedNFTs] = useState<any | undefined>(undefined);
+  const [ownedNFTsError, setOwnedNFTsError] = useState<Error | null>(null);
   useEffect(() => {
     if (contracts) {
-      console.log(contracts);
       getNFTs(
         address,
         contracts.map((c) => c.toString())
-      ).then((res) => setOwnedNFTs(res.ownedNfts));
+      )
+        .then((res) => setOwnedNFTs(res.ownedNfts))
+        .catch((error) => setOwnedNFTsError(error));
     }
   }, [contracts]);
 
   const renderItem = (item: any) => {
-    return <TokenImage src={item.media[0].gateway} />;
+    return (
+      <Item>
+        <TokenImage src={item.media[0].gateway} />
+        <TokenTextWrapper>
+          <TokenText>{item.metadata.name}</TokenText>
+        </TokenTextWrapper>
+      </Item>
+    );
   };
 
   if (isLoading) {
@@ -51,6 +60,10 @@ const SupportedERC721sPicker = ({
 
   if (isError) {
     return <>Could not load supported NFTs...</>;
+  }
+
+  if (ownedNFTsError) {
+    return <>Could not load wallet NFTs...</>;
   }
 
   return (
@@ -65,7 +78,7 @@ const SupportedERC721sPicker = ({
                 onERC721Selected({
                   tokenContract: item.contract.address,
                   tokenId: BigNumber.from(item.id.tokenId).toNumber(),
-                  imageURL: item.media[0].gateway
+                  imageURL: item.media[0].gateway,
                 })
               }
               renderItem={renderItem}
@@ -87,11 +100,28 @@ const TokenGrid = styled.div`
   gap: 1em;
 `;
 
+const Item = styled.div`
+  width: 150px;
+  height: 220px;
+`;
+
+const TokenTextWrapper = styled.div`
+  padding: 0.2em;
+`;
+const TokenText = styled.p`
+  text-align: center;
+  font-size: 0.9em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  display: block;
+  line-height: 1em;
+  max-height: 2em; /* number of lines to show  */
+`;
+
 const TokenImage = styled.img`
-  width: 100px;
-  height: 100px;
-  border-style: dashed;
-  border-color: #444;
+  max-width: 100%;
+  max-height: 100%;
 `;
 
 export default SupportedERC721sPicker;

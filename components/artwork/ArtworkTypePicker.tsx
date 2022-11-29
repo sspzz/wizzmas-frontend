@@ -10,30 +10,45 @@ const ArtworkTypePicker = ({
   artworks,
   onArtworkSelected,
 }: ArtworkTypePickerProps) => {
-  const [selected, setSelected] = useState<number | undefined>(undefined);
   const renderItem = (token: number) => {
     return (
-      <div>
+      <Item>
         <p>Artwork #{token}</p>
         <ArtworkImage src={`/api/artwork/img/${token}`} />
-      </div>
+      </Item>
     );
   };
 
   return (
     <>
-    <h3>Select Artwork:</h3>
-    <Picker
-      items={artworks}
-      renderItem={renderItem}
-      onSelected={onArtworkSelected}
-    />
+      <h3>Select Artwork:</h3>
+      <Grid>
+        <Picker
+          items={artworks}
+          renderItem={renderItem}
+          onSelected={onArtworkSelected}
+        />
+      </Grid>
     </>
   );
 };
 
+const Grid = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: stretch;
+  flex-wrap: wrap;
+  gap: 1em;
+`;
+
+const Item = styled.div`
+`;
+
 const ArtworkImage = styled.img`
-  max-height: 150px;
+  max-width: 250px;
+  max-height: 250px;
+  object-fit: contain;
 `;
 
 export default ArtworkTypePicker;

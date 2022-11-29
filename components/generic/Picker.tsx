@@ -27,7 +27,7 @@ const Picker = ({ items, renderItem, onSelected }: PickerProps) => {
 };
 
 const Unselected = styled.div`
-  color: yellow;
+  color: #aaa;
   cursor: pointer;
   border: dashed;
   border-color: #111;
@@ -41,7 +41,7 @@ const Selected = styled.div`
   color: yellow;
   cursor: pointer;
   border: dashed;
-  border-color: #ccc;
+  border-color: yellow;
   :hover {
     border: dashed;
     border-color: yellow;
