@@ -17,7 +17,7 @@ import WizzmasArtworkMinterArtifact from "../../contracts/WizzmasArtworkMinter.j
 import { range } from "../../lib/ArrayUtil";
 import WalletArtworkTypePicker from "./WalletArtworkTypePicker";
 import SupportedERC721sPicker, { SelectedERC721 } from "./SupportedERC721sPicker";
-import CardMessagePicker from "./CardMessagePicker";
+import MessagePicker from "./MessagePicker";
 import RecipientAddressInput from "./RecipientAddressInput";
 import CardMint from "./CardMint";
 
@@ -106,7 +106,7 @@ const CardMinter = () => {
         </Content>
 
         <Content>
-          <CardMessagePicker onCardMessageIdSelected={setSelectedMessage} />
+          <MessagePicker onCardMessageIdSelected={setSelectedMessage} />
         </Content>
 
         <Content>

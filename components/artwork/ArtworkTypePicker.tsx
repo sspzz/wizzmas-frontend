@@ -37,7 +37,7 @@ const ArtworkTypePicker = ({
 const Grid = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: start;
   align-content: stretch;
   flex-wrap: wrap;
   gap: 1em;
@@ -45,7 +45,7 @@ const Grid = styled.div`
 
 const Item = styled.div`
   width: 145px;
-  height: 250px;
+  height: 240px;
 `;
 
 const TextWrapper = styled.div`
@@ -60,7 +60,7 @@ const Text = styled.p`
   word-wrap: break-word;
   display: block;
   line-height: 1em;
-  max-height: 2em; /* number of lines to show  */
+  max-height: 1em; /* number of lines to show  */
 `;
 
 const Image = styled.img`

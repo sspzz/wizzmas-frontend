@@ -30,7 +30,7 @@ const Unselected = styled.div`
   color: #aaa;
   cursor: pointer;
   border: dashed;
-  border-color: #111;
+  border-color: #222;
   :hover {
     border: dashed;
     border-color: yellow;

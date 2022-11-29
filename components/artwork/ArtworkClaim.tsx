@@ -6,6 +6,7 @@ import {
 } from "wagmi";
 import WizzmasArtworkMinterArtifact from "../../contracts/WizzmasArtworkMinter.json";
 import DisplayError from "../generic/DisplayError";
+import { PrimaryButton } from "../generic/StyledComponents";
 import { ArtworkMintProps } from "./ArtworkMint";
 
 const ArtworkClaim: NextPage<ArtworkMintProps> = ({
@@ -33,9 +34,9 @@ const ArtworkClaim: NextPage<ArtworkMintProps> = ({
 
   return (
     <>
-      <button disabled={!write || isLoading} onClick={() => write!()}>
+      <PrimaryButton disabled={!write || isLoading} onClick={() => write!()}>
         {isLoading ? "Claiming..." : "Claim now"}
-      </button>
+      </PrimaryButton>
       {(prepareError || error) && (
         <DisplayError error={prepareError || error} />
       )}

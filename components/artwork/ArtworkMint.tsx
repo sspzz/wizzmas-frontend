@@ -7,6 +7,7 @@ import {
 } from "wagmi";
 import WizzmasArtworkMinterArtifact from "../../contracts/WizzmasArtworkMinter.json";
 import DisplayError from "../generic/DisplayError";
+import { PrimaryButton } from "../generic/StyledComponents";
 
 export type ArtworkMintProps = {
   artworkType: number;
@@ -58,9 +59,9 @@ const ArtworkMint: NextPage<ArtworkMintProps> = ({
 
   return (
     <>
-      <button disabled={!write || isLoading} onClick={() => write!()}>
+      <PrimaryButton disabled={!write || isLoading} onClick={() => write!()}>
         {isLoading ? "Minting..." : "Mint now"}
-      </button>
+      </PrimaryButton>
       {(prepareError || error) && (
         <DisplayError error={prepareError || error} />
       )}

@@ -1,6 +1,8 @@
 import { ethers } from "ethers";
 import { useState } from "react";
+import styled from "styled-components";
 import DisplayError from "../generic/DisplayError";
+import { Button, Segment, TextInput, VStack } from "../generic/StyledComponents";
 
 type RecipientAddressInputProps = {
   onRecipientValid: (recipient: string | undefined) => void;
@@ -30,19 +32,25 @@ const RecipientAddressInput = ({
   return (
     <>
       <h2>Enter recipient:</h2>
-      <input
-        required
-        value={address}
-        onChange={validate}
-        minLength={42}
-        maxLength={42}
-      />
-      <button onClick={addAddress} disabled={!validAddress}>
-        Add
-      </button>
-      <DisplayError error={inputError} />
+      <VStack>
+        <Segment>
+          <TextInput
+            required
+            value={address}
+            onChange={validate}
+            minLength={42}
+            maxLength={42}
+            placeholder="Enter address..."
+          />
+          <Button onClick={addAddress} disabled={!validAddress}>
+            Add recipient
+          </Button>
+        </Segment>
+        <DisplayError error={inputError} />
+      </VStack>
     </>
   );
 };
+
 
 export default RecipientAddressInput;

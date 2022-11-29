@@ -7,6 +7,7 @@ import {
 } from "wagmi";
 import DisplayError from "../generic/DisplayError";
 import WizzmasCardArtifact from "../../contracts/WizzmasCard.json";
+import { PrimaryButton } from "../generic/StyledComponents";
 
 export type CardMintProps = {
   nftContract: string | undefined;
@@ -53,9 +54,9 @@ const CardMint: NextPage<CardMintProps> = ({
       {messageId != undefined && <div>Selected message: {messageId}</div>}
       {recipient != undefined && <div>Selected recipient: {recipient}</div>}
 
-      <button disabled={!write || isLoading} onClick={() => write!()}>
+      <PrimaryButton disabled={!write || isLoading} onClick={() => write!()}>
         {isLoading ? "Minting..." : "Mint now"}
-      </button>
+      </PrimaryButton>
       {(prepareError || error) && (
         <DisplayError error={prepareError || error} />
       )}
