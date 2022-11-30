@@ -1,6 +1,5 @@
 import { ethers } from "ethers";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getERC721Contract } from "../../../../contracts/ERC721Contract";
 import { getArtworkMinterContract } from "../../../../contracts/WizzmasArtworkMinterContract";
 import { card } from "../../../../lib/ImageUtil";
 import { fetchERC721Artwork } from "../../../../lib/TokenArtwork";
@@ -21,7 +20,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const provider = getProvider();
 
   var artworkImageURL = undefined;
-  if (artwork) {
+  if (req.query.artwork !== undefined) {
     const contract = getArtworkMinterContract({ provider: provider });
     const available = (await contract.numArtworkTypes()).gt(artwork);
     if (!available) {
@@ -33,7 +32,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   var tokenImageURL = undefined;
-  if (tokenContract && token) {
+  if (req.query.contract !== undefined && req.query.token !== undefined) {
     tokenImageURL = await fetchERC721Artwork(tokenContract, token, provider);
   }
 

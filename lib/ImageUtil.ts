@@ -101,21 +101,21 @@ export async function card({
     }
 
     // Compose
-    if (artwork) {
+    if (artwork !== undefined) {
       overlays.push({
         input: artwork,
         top: 0,
         left: 0,
       });
     }
-    if (senderImage) {
+    if (senderImage !== undefined) {
       overlays.push({
         input: senderImage,
         top: Math.floor((height - senderImageSize.height) / 2),
         left: Math.floor((height - senderImageSize.height) / 2),
       });
     }
-    if (textOverlay) {
+    if (textOverlay !== undefined) {
       overlays.push({
         input: textOverlay,
         top: textPadding.top,

@@ -1,58 +1,16 @@
-import { NextPage } from "next";
 import styled from "styled-components";
-import {
-  useAccount,
-  useContractRead,
-  useContractReads,
-  useContractWrite,
-  usePrepareContractWrite,
-  useWaitForTransaction,
-} from "wagmi";
-import DisplayError from "../generic/DisplayError";
-import { useEffect, useState } from "react";
-import { BigNumber, ethers } from "ethers";
+import { useAccount, useContractRead } from "wagmi";
+import { useState } from "react";
 import WizzmasCardArtifact from "../../contracts/WizzmasCard.json";
-import WizzmasArtworkArtifact from "../../contracts/WizzmasArtwork.json";
-import WizzmasArtworkMinterArtifact from "../../contracts/WizzmasArtworkMinter.json";
-import { range } from "../../lib/ArrayUtil";
 import WalletArtworkTypePicker from "./WalletArtworkTypePicker";
 import SupportedERC721sPicker, {
   SelectedERC721,
 } from "./SupportedERC721sPicker";
-import MessagePicker from "./MessagePicker";
+import MessagePicker, { SelectedMessage } from "./MessagePicker";
 import RecipientAddressInput from "./RecipientAddressInput";
-import CardMint from "./CardMint";
+import CardMint, { CardMintProps } from "./CardMint";
 import { MediumTitle, SmallTitle, VStack } from "../generic/StyledComponents";
-
-// TODO:
-// 1. - Get connected wallet Artworks
-//         - numTokenTypes from Artworks contract
-//         - balanceOf(0...numTokenTypes-1)->tokenOfOwnerByIndex()
-//         - image from local store
-//    - Select Artwork (token id)
-//
-// 2. - Get wallet NFTs per supported NFT
-//         - supportedContracts from Card contract
-//         - supportedContracs.map((c) => c.balanceOf()->c.tokenOfOwnerByIndex())
-//         - images from meta with tokenURI()
-//    - Select NFT (contract address, token id)
-//
-// 3. - Get available Messages from Cards contract
-//    - Select Message (string)
-//
-// 4. - Enter recipient (validate address)
-//
-// 5. Mint!
-
-// ===========================================================================
-
-// ===========================================================================
-
-// ===========================================================================
-
-// ===========================================================================
-
-// ===========================================================================
+import CardPreview from "./CardPreview";
 
 const CardMinter = () => {
   const { address } = useAccount();
@@ -72,9 +30,9 @@ const CardMinter = () => {
   const [selectedNFT, setSelectedNFT] = useState<SelectedERC721 | undefined>(
     undefined
   );
-  const [selectedMessage, setSelectedMessage] = useState<number | undefined>(
-    undefined
-  );
+  const [selectedMessage, setSelectedMessage] = useState<
+    SelectedMessage | undefined
+  >(undefined);
   const [recipient, setRecipient] = useState<string | undefined>(undefined);
 
   if (!address) {
@@ -117,11 +75,18 @@ const CardMinter = () => {
             <RecipientAddressInput onRecipientValid={setRecipient} />
           </Content>
 
+          <CardPreviewWrapper>
+            <CardPreview
+              artworkType={selectedArtwork}
+              message={selectedMessage}
+              nft={selectedNFT}
+              recipient={recipient}
+            />
+          </CardPreviewWrapper>
           <CardMint
             artworkType={selectedArtwork}
-            messageId={selectedMessage}
-            nftContract={selectedNFT?.tokenContract}
-            nftTokenId={selectedNFT?.tokenId}
+            message={selectedMessage}
+            nft={selectedNFT}
             recipient={recipient}
           />
         </VStack>
@@ -137,6 +102,10 @@ const Content = styled.div`
   border-color: #444;
   padding: 1em;
   margin: 1em;
+`;
+
+const CardPreviewWrapper = styled.div`
+  background: gray;
 `;
 
 export default CardMinter;

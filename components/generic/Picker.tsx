@@ -18,8 +18,8 @@ const Picker = ({ items, renderItem, onSelected }: PickerProps) => {
             onSelected(item);
           }}
         >
-          {item === selected && <Selected>{renderItem(item)}</Selected>}
-          {item !== selected && <Unselected>{renderItem(item)}</Unselected>}
+          {JSON.stringify(item) === JSON.stringify(selected) && <Selected>{renderItem(item)}</Selected>}
+          {JSON.stringify(item) !== JSON.stringify(selected) && <Unselected>{renderItem(item)}</Unselected>}
         </div>
       ))}
     </>

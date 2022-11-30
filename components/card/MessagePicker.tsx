@@ -4,8 +4,13 @@ import WizzmasCardArtifact from "../../contracts/WizzmasCard.json";
 import Picker from "../generic/Picker";
 import { SmallTitle, VStack } from "../generic/StyledComponents";
 
+export type SelectedMessage = {
+  messageId: number;
+  message: string;
+}
+
 type MessagePickerProps = {
-  onCardMessageIdSelected: (messageId: number) => void;
+  onCardMessageIdSelected: (message: SelectedMessage) => void;
 };
 
 const MessagePicker = ({ onCardMessageIdSelected }: MessagePickerProps) => {
@@ -19,11 +24,11 @@ const MessagePicker = ({ onCardMessageIdSelected }: MessagePickerProps) => {
     functionName: "availableMessages",
   });
 
-  const renderItem = (index: number) => {
+  const renderItem = (message: SelectedMessage) => {
     return (
       <Item>
         <TextWrapper>
-          <Text>{messages ? messages[index] : ""}</Text>
+          <Text>{message.message}</Text>
         </TextWrapper>
       </Item>
     );
@@ -43,7 +48,7 @@ const MessagePicker = ({ onCardMessageIdSelected }: MessagePickerProps) => {
       <VStack>
         {messages && (
           <Picker
-            items={messages.map((message, i) => i)}
+            items={messages.map((message, i) => ({messageId: i, message: message}))}
             renderItem={renderItem}
             onSelected={onCardMessageIdSelected}
           />

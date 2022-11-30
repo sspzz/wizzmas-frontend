@@ -8,20 +8,20 @@ import {
 import DisplayError from "../generic/DisplayError";
 import WizzmasCardArtifact from "../../contracts/WizzmasCard.json";
 import { PrimaryButton, SmallTitle } from "../generic/StyledComponents";
+import { SelectedERC721 } from "./SupportedERC721sPicker";
+import { SelectedMessage } from "./MessagePicker";
 
 export type CardMintProps = {
-  nftContract: string | undefined;
-  nftTokenId: number | undefined;
+  nft: SelectedERC721 | undefined;
   artworkType: number | undefined;
-  messageId: number | undefined;
+  message: SelectedMessage | undefined;
   recipient: string | undefined;
 };
 
 const CardMint: NextPage<CardMintProps> = ({
-  nftContract,
-  nftTokenId,
+  nft,
   artworkType,
-  messageId,
+  message,
   recipient,
 }: CardMintProps) => {
   const { config, error: prepareError } = usePrepareContractWrite({
@@ -29,10 +29,10 @@ const CardMint: NextPage<CardMintProps> = ({
     contractInterface: WizzmasCardArtifact.abi,
     functionName: "mint",
     args: [
-      nftContract ? ethers.utils.getAddress(nftContract) : undefined,
-      nftTokenId,
+      nft?.tokenContract ? ethers.utils.getAddress(nft.tokenContract) : undefined,
+      nft?.tokenId,
       artworkType,
-      messageId,
+      message?.messageId,
       recipient ? ethers.utils.getAddress(recipient) : undefined,
     ],
   });
@@ -48,11 +48,11 @@ const CardMint: NextPage<CardMintProps> = ({
 
   return (
     <>
-      {nftContract != undefined && <div>Selected contract: {nftContract}</div>}
-      {nftTokenId != undefined && <div>Selected token: {nftTokenId}</div>}
-      {artworkType != undefined && <div>Selected artwork: {artworkType}</div>}
-      {messageId != undefined && <div>Selected message: {messageId}</div>}
-      {recipient != undefined && <div>Selected recipient: {recipient}</div>}
+      <div>Selected contract: {nft?.tokenContract}</div>
+      <div>Selected token: {nft?.tokenId}</div>
+      <div>Selected artwork: {artworkType}</div>
+      <div>Selected message: {message?.message}</div>
+      <div>Selected recipient: {recipient}</div>
 
       <PrimaryButton disabled={!write || isLoading} onClick={() => write!()}>
         {isLoading ? "Minting..." : "Mint now"}
