@@ -10,6 +10,7 @@ import WizzmasCardArtifact from "../../contracts/WizzmasCard.json";
 import { PrimaryButton, SmallTitle } from "../generic/StyledComponents";
 import { SelectedERC721 } from "./SupportedERC721sPicker";
 import { SelectedMessage } from "./MessagePicker";
+import CardPreview from "./CardPreview";
 
 export type CardMintProps = {
   nft: SelectedERC721 | undefined;
@@ -29,7 +30,9 @@ const CardMint: NextPage<CardMintProps> = ({
     contractInterface: WizzmasCardArtifact.abi,
     functionName: "mint",
     args: [
-      nft?.tokenContract ? ethers.utils.getAddress(nft.tokenContract) : undefined,
+      nft?.tokenContract
+        ? ethers.utils.getAddress(nft.tokenContract)
+        : undefined,
       nft?.tokenId,
       artworkType,
       message?.messageId,
@@ -53,6 +56,13 @@ const CardMint: NextPage<CardMintProps> = ({
       <div>Selected artwork: {artworkType}</div>
       <div>Selected message: {message?.message}</div>
       <div>Selected recipient: {recipient}</div>
+
+      <CardPreview
+        artworkType={artworkType}
+        message={message}
+        nft={nft}
+        recipient={recipient}
+      />
 
       <PrimaryButton disabled={!write || isLoading} onClick={() => write!()}>
         {isLoading ? "Minting..." : "Mint now"}

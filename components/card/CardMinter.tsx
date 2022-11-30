@@ -8,9 +8,8 @@ import SupportedERC721sPicker, {
 } from "./SupportedERC721sPicker";
 import MessagePicker, { SelectedMessage } from "./MessagePicker";
 import RecipientAddressInput from "./RecipientAddressInput";
-import CardMint, { CardMintProps } from "./CardMint";
 import { MediumTitle, SmallTitle, VStack } from "../generic/StyledComponents";
-import CardPreview from "./CardPreview";
+import CardMint from "./CardMint";
 
 const CardMinter = () => {
   const { address } = useAccount();
@@ -75,14 +74,6 @@ const CardMinter = () => {
             <RecipientAddressInput onRecipientValid={setRecipient} />
           </Content>
 
-          <CardPreviewWrapper>
-            <CardPreview
-              artworkType={selectedArtwork}
-              message={selectedMessage}
-              nft={selectedNFT}
-              recipient={recipient}
-            />
-          </CardPreviewWrapper>
           <CardMint
             artworkType={selectedArtwork}
             message={selectedMessage}
@@ -102,10 +93,6 @@ const Content = styled.div`
   border-color: #444;
   padding: 1em;
   margin: 1em;
-`;
-
-const CardPreviewWrapper = styled.div`
-  background: gray;
 `;
 
 export default CardMinter;

@@ -23,6 +23,7 @@ const CardPreview = ({
 const CardImage = styled.img`
   width: 1080px;
   height: 400px;
+  background: #444;
 `;
 
 export default CardPreview;
