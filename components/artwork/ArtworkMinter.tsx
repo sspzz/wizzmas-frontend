@@ -2,7 +2,7 @@ import { NextPage } from "next";
 import { useState } from "react";
 import styled from "styled-components";
 import { useAccount, useContractRead } from "wagmi";
-import WizzmasArtworkMinterArtifact from "../../contracts/WizzmasArtworkMinter.json";
+import WizzmasArtworkMinterArtifact from "../../contracts/artifacts/WizzmasArtworkMinter.json";
 import ArtworkTypePicker from "./AvailableArtworkTypesPicker";
 import ArtworkClaim from "./ArtworkClaim";
 import ArtworkMint from "./ArtworkMint";

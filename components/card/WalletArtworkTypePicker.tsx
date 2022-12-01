@@ -2,8 +2,8 @@ import { BigNumber } from "ethers";
 import { useEffect, useState } from "react";
 import { useContractRead, useContractReads } from "wagmi";
 import { range } from "../../lib/ArrayUtil";
-import WizzmasArtworkArtifact from "../../contracts/WizzmasArtwork.json";
-import WizzmasArtworkMinterArtifact from "../../contracts/WizzmasArtworkMinter.json";
+import WizzmasArtworkArtifact from "../../contracts/artifacts/WizzmasArtwork.json";
+import WizzmasArtworkMinterArtifact from "../../contracts/artifacts/WizzmasArtworkMinter.json";
 import ArtworkTypePicker from "../artwork/ArtworkTypePicker";
 
 type TokenBalance = {

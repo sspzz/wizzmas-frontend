@@ -36,7 +36,7 @@ const ArtworkTypePicker = ({
 };
 
 const Item = styled.div`
-  width: 145px;
+  width: 250px;
   height: 240px;
 `;
 

@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getArtworkMinterContract } from "../../../../contracts/WizzmasArtworkMinterContract";
 import { card } from "../../../../lib/ImageUtil";
+import { getTemplateImagePath } from "../../../../lib/TemplateUtil";
 import { fetchERC721Artwork } from "../../../../lib/TokenArtwork";
 
 function getProvider() {
@@ -12,7 +12,7 @@ function getProvider() {
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const artwork = parseInt(req.query.artwork as string, 10);
+  const template = parseInt(req.query.template as string, 10);
   const token = parseInt(req.query.token as string, 10);
   const tokenContract = req.query.contract as string;
   const message = req.query.message as string;
@@ -20,15 +20,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const provider = getProvider();
 
   var artworkImageURL = undefined;
-  if (req.query.artwork !== undefined) {
-    const contract = getArtworkMinterContract({ provider: provider });
-    const available = (await contract.numArtworkTypes()).gt(artwork);
-    if (!available) {
-      return res.status(404).end();
-    }
-    artworkImageURL = `${
-      process.env.VERCEL_URL ?? "http://localhost:3000"
-    }/api/artwork/img/${artwork}`;
+  if (req.query.template !== undefined) {
+    artworkImageURL = getTemplateImagePath(template);
   }
 
   var tokenImageURL = undefined;
@@ -37,7 +30,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   const imageBuffer = await card({
-    artworkImageUrl: artworkImageURL,
+    templatePath: artworkImageURL,
     senderImageUrl: tokenImageURL,
     message: message,
   });

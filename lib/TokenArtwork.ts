@@ -6,7 +6,7 @@ function ipfs(url: string): string {
     : url;
 }
 
-export async function fetchERC721Artwork(
+export async function fetchERC721TokenUri(
   contractAddress: string,
   tokenId: number,
   provider: any
@@ -15,12 +15,33 @@ export async function fetchERC721Artwork(
     address: contractAddress,
     provider: provider,
   });
-  const uri = await contract.tokenURI(tokenId);
-  return fetchArtwork(uri);
+  return contract.tokenURI(tokenId);
+}
+
+export async function fetchERC721Artwork(
+  contractAddress: string,
+  tokenId: number,
+  provider: any
+): Promise<string> {
+  return fetchERC721TokenUri(contractAddress, tokenId, provider).then((uri) =>
+    fetchArtwork(uri)
+  );
+}
+
+export async function fetchERC721Meta(
+  contractAddress: string,
+  tokenId: number,
+  provider: any
+): Promise<string> {
+  return fetchERC721TokenUri(contractAddress, tokenId, provider).then((uri) =>
+    fetchMeta(uri)
+  );
+}
+
+export async function fetchMeta(tokenURI: string): Promise<any> {
+  return fetch(ipfs(tokenURI)).then((res) => res?.json());
 }
 
 export async function fetchArtwork(tokenURI: string): Promise<string> {
-  return fetch(ipfs(tokenURI))
-    .then((res) => res?.json())
-    .then((data: any) => ipfs(data.image))
+  return fetchMeta(tokenURI).then((data: any) => ipfs(data.image));
 }

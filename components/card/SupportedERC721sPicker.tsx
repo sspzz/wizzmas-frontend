@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useContractRead } from "wagmi";
-import WizzmasCardArtifact from "../../contracts/WizzmasCard.json";
+import WizzmasCardArtifact from "../../contracts/artifacts/WizzmasCard.json";
 import { BigNumber } from "ethers";
 import { getNFTs } from "../../lib/AlchemyUtil";
 import Picker from "../generic/Picker";

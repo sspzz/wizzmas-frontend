@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useContractRead } from "wagmi";
-import WizzmasCardArtifact from "../../contracts/WizzmasCard.json";
+import WizzmasCardArtifact from "../../contracts/artifacts/WizzmasCard.json";
 import Picker from "../generic/Picker";
 import { SmallTitle, VStack } from "../generic/StyledComponents";
 

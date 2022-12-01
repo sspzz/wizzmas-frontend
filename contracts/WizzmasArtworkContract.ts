@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import WizzmasArtworkArtifact from "./WizzmasArtwork.json";
+import WizzmasArtworkArtifact from "./artifacts/WizzmasArtwork.json";
 
 export function getArtworksContract({ provider }: { provider: any }) {
   if (!process.env.NEXT_PUBLIC_ARTWORK_CONTRACT_ADDRESS) {

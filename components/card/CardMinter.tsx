@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useAccount, useContractRead } from "wagmi";
 import { useState } from "react";
-import WizzmasCardArtifact from "../../contracts/WizzmasCard.json";
+import WizzmasCardArtifact from "../../contracts/artifacts/WizzmasCard.json";
 import WalletArtworkTypePicker from "./WalletArtworkTypePicker";
 import SupportedERC721sPicker, {
   SelectedERC721,
@@ -10,6 +10,7 @@ import MessagePicker, { SelectedMessage } from "./MessagePicker";
 import RecipientAddressInput from "./RecipientAddressInput";
 import { MediumTitle, SmallTitle, VStack } from "../generic/StyledComponents";
 import CardMint from "./CardMint";
+import TemplatePicker from "./TemplatePicker";
 
 const CardMinter = () => {
   const { address } = useAccount();
@@ -24,6 +25,9 @@ const CardMinter = () => {
   });
 
   const [selectedArtwork, setSelecteArtwork] = useState<number | undefined>(
+    undefined
+  );
+  const [selectedTemplate, setSelectedTemplate] = useState<number | undefined>(
     undefined
   );
   const [selectedNFT, setSelectedNFT] = useState<SelectedERC721 | undefined>(
@@ -60,6 +64,10 @@ const CardMinter = () => {
           </Content>
 
           <Content>
+            <TemplatePicker onTemplateSelected={setSelectedTemplate} />
+          </Content>
+
+          <Content>
             <SupportedERC721sPicker
               address={address}
               onERC721Selected={setSelectedNFT}
@@ -76,6 +84,7 @@ const CardMinter = () => {
 
           <CardMint
             artworkType={selectedArtwork}
+            templateType={selectedTemplate}
             message={selectedMessage}
             nft={selectedNFT}
             recipient={recipient}

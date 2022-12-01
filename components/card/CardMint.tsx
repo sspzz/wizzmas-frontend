@@ -6,7 +6,7 @@ import {
   useWaitForTransaction,
 } from "wagmi";
 import DisplayError from "../generic/DisplayError";
-import WizzmasCardArtifact from "../../contracts/WizzmasCard.json";
+import WizzmasCardArtifact from "../../contracts/artifacts/WizzmasCard.json";
 import { PrimaryButton, SmallTitle } from "../generic/StyledComponents";
 import { SelectedERC721 } from "./SupportedERC721sPicker";
 import { SelectedMessage } from "./MessagePicker";
@@ -15,6 +15,7 @@ import CardPreview from "./CardPreview";
 export type CardMintProps = {
   nft: SelectedERC721 | undefined;
   artworkType: number | undefined;
+  templateType: number | undefined;
   message: SelectedMessage | undefined;
   recipient: string | undefined;
 };
@@ -22,6 +23,7 @@ export type CardMintProps = {
 const CardMint: NextPage<CardMintProps> = ({
   nft,
   artworkType,
+  templateType,
   message,
   recipient,
 }: CardMintProps) => {
@@ -35,6 +37,7 @@ const CardMint: NextPage<CardMintProps> = ({
         : undefined,
       nft?.tokenId,
       artworkType,
+      templateType,
       message?.messageId,
       recipient ? ethers.utils.getAddress(recipient) : undefined,
     ],
@@ -54,11 +57,13 @@ const CardMint: NextPage<CardMintProps> = ({
       <div>Selected contract: {nft?.tokenContract}</div>
       <div>Selected token: {nft?.tokenId}</div>
       <div>Selected artwork: {artworkType}</div>
+      <div>Selected template: {templateType}</div>
       <div>Selected message: {message?.message}</div>
       <div>Selected recipient: {recipient}</div>
 
       <CardPreview
         artworkType={artworkType}
+        templateType={templateType}
         message={message}
         nft={nft}
         recipient={recipient}

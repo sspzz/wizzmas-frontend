@@ -23,18 +23,18 @@ async function urlToBuffer(url: string): Promise<Buffer> {
 }
 
 export type CardParams = {
-  artworkImageUrl: string | undefined;
+  templatePath: string | undefined;
   senderImageUrl: string | undefined;
   message: string | undefined;
   width?: number;
   height?: number;
 };
 export async function card({
-  artworkImageUrl,
+  templatePath,
   senderImageUrl,
   message,
-  width = 1080,
-  height = 432,
+  width = 750,
+  height = 590,
 }: CardParams) {
   try {
     const overlays: any[] = [];
@@ -51,16 +51,22 @@ export async function card({
 
     // Artwork
     var artwork = undefined;
-    if (artworkImageUrl) {
-      artwork = await sharp(await urlToBuffer(artworkImageUrl))
-      .resize(width, height)
+    if (templatePath) {
+      artwork = await sharp(templatePath)
+        .resize(width, height)
         .png()
         .toBuffer();
+
+      overlays.push({
+        input: artwork,
+        top: 0,
+        left: 0,
+      });
     }
 
     // Sender NFT
     var senderImage = undefined;
-    const senderImageSize = { width: height * 0.8, height: height * 0.8 };
+    const senderImageSize = { width: height * 0.25, height: height * 0.25 };
     if (senderImageUrl) {
       senderImage = await sharp(await urlToBuffer(senderImageUrl))
         .resize(
@@ -75,15 +81,21 @@ export async function card({
         )
         .png()
         .toBuffer();
+
+      overlays.push({
+        input: senderImage,
+        left: Math.floor(senderImageSize.height * 0.9),
+        top: Math.floor(senderImageSize.height * 2.9),
+      });
     }
 
     // Message
     var textOverlay = undefined;
-    const textHeight = height / 2;
-    const textWidth = width / 2;
+    const textHeight = height / 4.5;
+    const textWidth = width / 1.85;
     const textPadding = {
-      top: height * (5 / 24),
-      left: width * (29 / 60),
+      top: Math.floor(textHeight*3.5),
+      left: Math.floor(width - (textWidth*1.1)),
     };
     if (message) {
       const text = {
@@ -98,30 +110,15 @@ export async function card({
         },
       };
       textOverlay = await sharp(text).png().toBuffer();
-    }
 
-    // Compose
-    if (artwork !== undefined) {
-      overlays.push({
-        input: artwork,
-        top: 0,
-        left: 0,
-      });
-    }
-    if (senderImage !== undefined) {
-      overlays.push({
-        input: senderImage,
-        top: Math.floor((height - senderImageSize.height) / 2),
-        left: Math.floor((height - senderImageSize.height) / 2),
-      });
-    }
-    if (textOverlay !== undefined) {
       overlays.push({
         input: textOverlay,
         top: textPadding.top,
         left: textPadding.left,
       });
     }
+
+    // Compose
     return background
       .composite(overlays)
       .toBuffer()

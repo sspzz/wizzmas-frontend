@@ -5,7 +5,7 @@ import {
   usePrepareContractWrite,
   useWaitForTransaction,
 } from "wagmi";
-import WizzmasArtworkMinterArtifact from "../../contracts/WizzmasArtworkMinter.json";
+import WizzmasArtworkMinterArtifact from "../../contracts/artifacts/WizzmasArtworkMinter.json";
 import DisplayError from "../generic/DisplayError";
 import { PrimaryButton, SmallTitle } from "../generic/StyledComponents";
 

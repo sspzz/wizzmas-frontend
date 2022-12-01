@@ -2,7 +2,7 @@ import { BigNumber } from "ethers";
 import { NextPage } from "next";
 import { useState } from "react";
 import { useContractRead } from "wagmi";
-import WizzmasArtworkMinterArtifact from "../../contracts/WizzmasArtworkMinter.json";
+import WizzmasArtworkMinterArtifact from "../../contracts/artifacts/WizzmasArtworkMinter.json";
 import { range } from "../../lib/ArrayUtil";
 import ArtworkTypePicker from "./ArtworkTypePicker";
 

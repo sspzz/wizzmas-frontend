@@ -11,6 +11,7 @@ function getProvider() {
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const artwork = parseInt(req.query.artwork as string, 10);
+  const template = parseInt(req.query.template as string, 10);
   const token = parseInt(req.query.token as string, 10);
   const tokenContract = req.query.contract as string;
   const message = req.query.message as string;
@@ -22,7 +23,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const backUrl = `${
       process.env.VERCEL_URL ?? "http://localhost:3000"
-    }/api/card/img/generate?artwork=${artwork}&token=${token}&contract=${tokenContract}&message=${message}`;
+    }/api/card/img/generate?token=${token}&contract=${tokenContract}&message=${message}&template=${template}`;
 
     const content = `
         <!DOCTYPE html>
@@ -32,8 +33,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         /* The flip card container - set the width and height to whatever you want. We have added the border property to demonstrate that the flip itself goes out of the box on hover (remove perspective if you don't want the 3D effect */
         .flip-card {
             background-color: transparent;
-            width: 300px;
-            height: 200px;
+            width: 750px;
+            height: 590px;
             border: 1px solid #f1f1f1;
             perspective: 1000px; /* Remove this if you don't want the 3D effect */
         }
@@ -80,10 +81,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         <div class="flip-card">
         <div class="flip-card-inner">
             <div class="flip-card-front">
-            <img src="${frontUrl}" alt="Front" style="width:300px;height:300px;">
+            <img src="${frontUrl}" alt="Front" style="width:750px;height:590px;object-fit:contain;">
             </div>
             <div class="flip-card-back">
-            <img src="${backUrl}" alt="Back" style="width:300px;height:300px;">
+            <img src="${backUrl}" alt="Back" style="width:750px;height:590px;object-fit:contain;">
             </div>
         </div>
         </div>
