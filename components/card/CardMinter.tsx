@@ -54,7 +54,7 @@ const CardMinter = () => {
     return (
       <Content>
         <VStack>
-          <MediumTitle>Wizzmas Cards</MediumTitle>
+          <MediumTitle>Create Wizzmas Cards</MediumTitle>
 
           <Content>
             <WalletArtworkTypePicker
