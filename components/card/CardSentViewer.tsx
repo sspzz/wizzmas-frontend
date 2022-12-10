@@ -20,19 +20,30 @@ const CardSentViewer = () => {
         args: [address],
     });
 
-    const [sentCards, setSentCards] = useState<any | undefined>(undefined);
-    useEffect(() => {
-        if (senderIds) {
-
-        }
-    });
-
     const renderItem = (item: any) => {
+        const dynamicUrl = `${
+            process.env.VERCEL_URL ?? "http://localhost:3000"
+        }/api/card/dynamic/${item}`;
+        const [card, loadCard] = useState<any | undefined>(undefined);
+        
+        useEffect( () => {
+            async function fetchCard() {
+                try {
+                    const response = await fetch(dynamicUrl);
+                    const content = await response.text();
+                    loadCard(content);
+
+                } catch (err) {
+                    console.log(err);
+                }
+            }
+            fetchCard();
+        }, []);
+
         return (
             <Item>
                 <Wrapper>
-                    <Image src={`/api/card/img/${item}.png`} />
-                    <Text>Card #{item}</Text>
+                    <Card dangerouslySetInnerHTML={{ __html: card}} />
                 </Wrapper>
             </Item>
         );
@@ -85,8 +96,8 @@ const Content = styled.div`
 `;
 
 const Item = styled.div`
-  width: 250px;
-  height: 240px;
+  width: 300px;
+  height: 300px;
 `;
 
 const Wrapper = styled.div`
@@ -105,6 +116,12 @@ const Text = styled.p`
 `;
 
 const Image = styled.img`
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+`;
+
+const Card = styled.div`
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;

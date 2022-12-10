@@ -30,10 +30,6 @@ const Front = styled.div`
   cursor: pointer;
   border: dashed;
   border-color: #222;
-  :hover {
-    border: dashed;
-    border-color: yellow;
-  }
 `;
 
 const Back = styled.div`
