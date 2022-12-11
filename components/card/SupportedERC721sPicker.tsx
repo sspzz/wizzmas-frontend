@@ -6,6 +6,7 @@ import { BigNumber } from "ethers";
 import { getNFTs } from "../../lib/AlchemyUtil";
 import Picker from "../generic/Picker";
 import { HStack, SmallTitle } from "../generic/StyledComponents";
+import { SUPPORTED_TOKENS } from "../../constants";
 
 export interface SelectedERC721 {
   tokenContract: string;
@@ -21,15 +22,7 @@ const SupportedERC721sPicker = ({
   address,
   onERC721Selected,
 }: SupportedERC721sPickerProps) => {
-  const {
-    data: contracts,
-    isError,
-    isLoading,
-  } = useContractRead({
-    addressOrName: process.env.NEXT_PUBLIC_CARD_CONTRACT_ADDRESS ?? "",
-    contractInterface: WizzmasCardArtifact.abi,
-    functionName: "supportedContracts",
-  });
+  const contracts = SUPPORTED_TOKENS;
 
   const [ownedNFTs, setOwnedNFTs] = useState<any | undefined>(undefined);
   const [ownedNFTsError, setOwnedNFTsError] = useState<Error | null>(null);
@@ -54,14 +47,6 @@ const SupportedERC721sPicker = ({
       </Item>
     );
   };
-
-  if (isLoading) {
-    return <SmallTitle>Loading supported NFTs...</SmallTitle>;
-  }
-
-  if (isError) {
-    return <SmallTitle>Could not load supported NFTs...</SmallTitle>;
-  }
 
   if (ownedNFTsError) {
     return <SmallTitle>Could not load wallet NFTs...</SmallTitle>;
