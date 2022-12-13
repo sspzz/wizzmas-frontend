@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 import CardMinter from "../../components/card/CardMinter";
 
 
@@ -15,6 +16,7 @@ const Send = () => {
             <>
                 <Header />
                 <CardMinter />
+                <Footer />
             </>
         );
     }

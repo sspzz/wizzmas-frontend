@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 
 const Gallery = () => {
     const [domLoaded, setDomLoaded] = useState(false);
@@ -12,6 +13,7 @@ const Gallery = () => {
             <>
                 <Header />
                 <p>Gallery Page</p>
+                <Footer />
             </>
         );
     }

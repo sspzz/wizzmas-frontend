@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 import CardSentViewer from "../../components/card/CardSentViewer";
 import CardReceivedViewer from "../../components/card/CardReceivedViewer";
 
@@ -15,6 +16,7 @@ const View = () => {
                 <Header />
                 <CardSentViewer />
                 <CardReceivedViewer />
+                <Footer />
             </>
         );
     }
