@@ -1,11 +1,10 @@
 import styled from "styled-components";
 import { useAccount, useContractRead } from "wagmi";
-import { BigNumber } from "ethers";
 import { useEffect, useState } from "react";
 import WizzmasCardArtifact from "../../contracts/artifacts/WizzmasCard.json";
 import { range } from "../../lib/ArrayUtil";
 import FlipViewer from "../generic/FlipViewer";
-import { MediumTitle, SmallTitle, VStack, HStack } from "../generic/StyledComponents";
+import { SmallTitle } from "../generic/StyledComponents";
 
 const CardReceivedViewer = () => {
     const { address } = useAccount();
@@ -20,19 +19,29 @@ const CardReceivedViewer = () => {
         args: [address],
     });
 
-    const [receivedCards, setReceivedCards] = useState<any | undefined>(undefined);
-    useEffect(() => {
-        if (recipientIds) {
-
-        }
-    });
-
     const renderItem = (item: any) => {
+        const dynamicUrl = `${
+            process.env.VERCEL_URL ?? "http://localhost:3000"
+        }/api/card/dynamic/${item}`;
+        const [card, loadCard] = useState<any | undefined>(undefined);
+
+        useEffect( () => {
+            async function fetchCard() {
+                try {
+                    const response = await fetch(dynamicUrl);
+                    const content = await response.text();
+                    loadCard(content);
+                } catch (err) {
+                    console.log(err);
+                }
+            }
+            fetchCard();
+        }, []);
+
         return (
             <Item>
                 <Wrapper>
-                    <Image src={`/api/card/img/${item}.png`} />
-                    <Text>Card #{item}</Text>
+                    <Card dangerouslySetInnerHTML={{ __html: card}} />
                 </Wrapper>
             </Item>
         );
@@ -52,59 +61,60 @@ const CardReceivedViewer = () => {
 
     if (recipientIds != undefined && recipientIds.length > 0) {
         return (
-            <Content>
-                <VStack>
-                    <MediumTitle>Received Cards</MediumTitle>
-                    <HStack>
-                        <FlipViewer
-                            items={range(0, recipientIds.length)}
-                            renderItem={renderItem}
-                        />
-                    </HStack>
-                </VStack>
-            </Content>
+            <>
+                <Title>
+                    <h3>
+                        Showing {recipientIds.length} Cards Received.
+                    </h3>
+                </Title>
+                <CardGrid>
+                    <FlipViewer
+                        items={range(0, recipientIds.length)}
+                        renderItem={renderItem}
+                    />
+                </CardGrid>
+            </>
         );
     } else {
         return (
-            <Content>
-                <VStack>
-                    <MediumTitle>Received Cards</MediumTitle>
-                    <p>No received cards!</p>
-                </VStack>
-            </Content>
+            <>
+                <p>No received cards!</p>
+            </>
         )
     }
 
 };
 
-const Content = styled.div`
-  border-style: dashed;
-  border-color: #444;
-  padding: 1em;
-  margin: 1em;
+const CardGrid = styled.div`
+  padding: 1rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1em;
+`;
+
+const Title = styled.div`
+  padding-left: 2em;
+  padding-right: 2em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  gap: 1em;
+  width: 100%;
 `;
 
 const Item = styled.div`
-  width: 250px;
-  height: 240px;
+  width: 300px;
+  height: 300px;
 `;
 
 const Wrapper = styled.div`
   padding: 0.2em;
 `;
 
-const Text = styled.p`
-  text-align: center;
-  font-size: 0.9em;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  word-wrap: break-word;
-  display: block;
-  line-height: 1em;
-  max-height: 1em; /* number of lines to show  */
-`;
-
-const Image = styled.img`
+const Card = styled.div`
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;

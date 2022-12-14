@@ -37,7 +37,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             background-color: transparent;
             width: 300px;
             height: 200px;
-            border: 1px solid #f1f1f1;
             perspective: 1000px; /* Remove this if you don't want the 3D effect */
         }
         
