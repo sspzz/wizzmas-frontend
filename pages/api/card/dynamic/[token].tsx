@@ -21,7 +21,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const frontUrl = `${
       process.env.VERCEL_URL ?? "http://localhost:3000"
-    }/api/artwork/img/${mintedCard.artwork}`;
+    }/api/artwork/gif/${mintedCard.artwork}`;
 
     const backUrl = `${
       process.env.VERCEL_URL ?? "http://localhost:3000"
