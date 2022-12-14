@@ -17,12 +17,9 @@ const Covers = () => {
                 <Header />
 
                 <Content>
-                    <Wrapper>
-                        <Section>
-                            <ArtworkMinter />
-                        </Section>
-                    </Wrapper>
-
+                    <FillSection>
+                        <ArtworkMinter />
+                    </FillSection>
                     <Section>
                         <MintFAQ />
                     </Section>
@@ -42,6 +39,18 @@ export const Content = styled.div`
   flex-direction: column;
   gap: 3em;
   margin-bottom: 2em;
+`;
+
+export const FillSection = styled.div`
+  background: #111;
+  width: 100%;
+  padding: 2em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 1em;
 `;
 
 export const Section = styled.div`

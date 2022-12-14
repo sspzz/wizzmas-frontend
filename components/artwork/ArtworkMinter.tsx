@@ -7,6 +7,7 @@ import ArtworkTypePicker from "./AvailableArtworkTypesPicker";
 import ArtworkClaim from "./ArtworkClaim";
 import ArtworkMint from "./ArtworkMint";
 import AvailableArtworkTypesPicker from "./AvailableArtworkTypesPicker";
+import CoverViewer from "./CoverViewer";
 import {
   MediumTitle,
   Segment,
@@ -53,16 +54,12 @@ const ArtworkMinter: NextPage = () => {
 
   if (mintEnabled) {
     return (
-      <Content>
-        <VStack>
-          <MediumTitle>Wizzmas Artwork</MediumTitle>
-          <Content>
-            <AvailableArtworkTypesPicker onArtworkSelected={setArtworkType} />
-          </Content>
-          {canClaim && <ArtworkClaim artworkType={artworkType} />}
+      <>
+        <MediumTitle>Wizzmas Cover</MediumTitle>
+        <CoverViewer />
+          {canClaim && <ArtworkClaim artworkType={0} />}
           {/* {!canClaim && <ArtworkMint artworkType={artworkType} />} */}
-        </VStack>
-      </Content>
+      </>
     );
   } else {
     return <p>Mint is closed!</p>;
