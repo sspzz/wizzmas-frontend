@@ -1,11 +1,10 @@
 import styled from "styled-components";
 import { useAccount, useContractRead } from "wagmi";
-import { BigNumber } from "ethers";
 import { useEffect, useState } from "react";
 import WizzmasCardArtifact from "../../contracts/artifacts/WizzmasCard.json";
 import { range } from "../../lib/ArrayUtil";
 import FlipViewer from "../generic/FlipViewer";
-import { MediumTitle, SmallTitle, VStack, HStack } from "../generic/StyledComponents";
+import { SmallTitle } from "../generic/StyledComponents";
 
 const CardSentViewer = () => {
     const { address } = useAccount();
@@ -63,36 +62,48 @@ const CardSentViewer = () => {
 
     if (senderIds != undefined && senderIds.length > 0) {
         return (
-            <Content>
-                <VStack>
-                    <MediumTitle>Sent Cards</MediumTitle>
-                    <HStack>
-                        <FlipViewer
-                            items={range(0, senderIds.length)}
-                            renderItem={renderItem}
-                        />
-                    </HStack>
-                </VStack>
-            </Content>
+            <>
+                <Title>
+                    <h3>
+                        Showing {senderIds.length} Cards Sent.
+                    </h3>
+                </Title>
+                <CardGrid>
+                    <FlipViewer
+                        items={range(0, senderIds.length)}
+                        renderItem={renderItem}
+                    />
+                </CardGrid>
+            </>
         );
     } else {
         return (
-            <Content>
-                <VStack>
-                    <MediumTitle>Sent Cards</MediumTitle>
-                    <p>No sent cards!</p>
-                </VStack>
-            </Content>
+            <>
+                <p>No sent cards!</p>
+            </>
         )
     }
 
 };
 
-const Content = styled.div`
-  border-style: dashed;
-  border-color: #444;
-  padding: 1em;
-  margin: 1em;
+const CardGrid = styled.div`
+  padding: 1rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1em;
+`;
+
+const Title = styled.div`
+  padding-left: 2em;
+  padding-right: 2em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  gap: 1em;
+  width: 100%;
 `;
 
 const Item = styled.div`
@@ -102,23 +113,6 @@ const Item = styled.div`
 
 const Wrapper = styled.div`
   padding: 0.2em;
-`;
-
-const Text = styled.p`
-  text-align: center;
-  font-size: 0.9em;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  word-wrap: break-word;
-  display: block;
-  line-height: 1em;
-  max-height: 1em; /* number of lines to show  */
-`;
-
-const Image = styled.img`
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
 `;
 
 const Card = styled.div`

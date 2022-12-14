@@ -4,7 +4,8 @@ import CardMinter from "../components/card/CardMinter";
 import CardSentViewer from "../components/card/CardSentViewer";
 import CardReceivedViewer from "../components/card/CardReceivedViewer";
 import ConnectButton from "../components/ConnectButton";
-import { LargeTitle } from "../components/generic/StyledComponents";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 export default function Home() {
   const [domLoaded, setDomLoaded] = useState(false);
@@ -14,14 +15,14 @@ export default function Home() {
 
   return (
     <div>
-      <LargeTitle>Wizzmas 2022</LargeTitle>
       {domLoaded && (
         <>
-          <ConnectButton />
+          <Header />
           <ArtworkMinter />
           <CardSentViewer />
           <CardReceivedViewer />
           <CardMinter />
+          <Footer />
         </>
       )}
     </div>

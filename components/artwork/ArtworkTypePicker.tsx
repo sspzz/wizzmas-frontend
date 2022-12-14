@@ -13,7 +13,7 @@ const ArtworkTypePicker = ({
   const renderItem = (token: number) => {
     return (
       <Item>
-        <Image src={`/api/artwork/img/${token}`} />
+        <Image src={`/api/artwork/gif/${token}`} />
         <TextWrapper>
           <Text>Artwork #{token}</Text>
         </TextWrapper>
