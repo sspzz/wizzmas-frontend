@@ -6,11 +6,11 @@ import { SUPPORTED_TOKENS } from "../../constants";
 import { getNFTs } from "../../lib/AlchemyUtil";
 import { HStack } from "../generic/StyledComponents";
 import Picker from "../generic/Picker";
+import { fetchRunesWalkCycleFront } from "../../lib/TokenArtwork";
 
 export interface SelectedToken {
     tokenContract: string;
     tokenId: number;
-    imageURL: string;
 }
 
 type SelectedTokenProps = {
@@ -39,9 +39,11 @@ const TokenPicker = ({
     }, [supportedTokens]);
 
     const renderItem = (item: any) => {
+        let id = BigNumber.from(item.id.tokenId).toNumber();
+        let imgUrl = fetchRunesWalkCycleFront(item.contract.address, id);
         return (
             <Item>
-                <TokenImage src={item.media[0].gateway} />
+                <TokenImage src={imgUrl} />
                 <TokenTextWrapper>
                     <TokenText>{item.metadata.name}</TokenText>
                 </TokenTextWrapper>
@@ -54,7 +56,6 @@ const TokenPicker = ({
     }
 
     return (
-        <div>
             <HStack>
                 {ownedTokens && (
                     <>
@@ -64,7 +65,6 @@ const TokenPicker = ({
                                 onTokenSelected({
                                     tokenContract: item.contract.address,
                                     tokenId: BigNumber.from(item.id.tokenId).toNumber(),
-                                    imageURL: item.media[0].gateway,
                                 })
                             }
                             renderItem={renderItem}
@@ -73,7 +73,6 @@ const TokenPicker = ({
                     </>
                 )}
             </HStack>
-        </div>
     );
 };
 

@@ -2,7 +2,7 @@ import { ethers } from "ethers";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { card } from "../../../../lib/ImageUtil";
 import { getTemplateImagePath } from "../../../../lib/TemplateUtil";
-import { fetchERC721Artwork } from "../../../../lib/TokenArtwork";
+import { fetchERC721Artwork, fetchRunesWalkCycleFront } from "../../../../lib/TokenArtwork";
 
 function getProvider() {
   return new ethers.providers.StaticJsonRpcProvider("http://127.0.0.1:8545", {
@@ -26,7 +26,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   var tokenImageURL = undefined;
   if (req.query.contract !== undefined && req.query.token !== undefined) {
-    tokenImageURL = await fetchERC721Artwork(tokenContract, token, provider);
+    tokenImageURL = fetchRunesWalkCycleFront(tokenContract, token);
+    //fetchERC721Artwork(tokenContract, token, provider);
   }
 
   const imageBuffer = await card({
