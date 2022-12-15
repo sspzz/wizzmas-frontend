@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { useAccount, useContractRead } from 'wagmi'
 import { SUPPORTED_TOKENS } from '../../constants'
 import { getNFTs } from '../../lib/AlchemyUtil'
-import { HStack } from '../generic/StyledComponents'
 import Picker from '../generic/Picker'
 
 export interface SelectedToken {
@@ -53,27 +52,44 @@ const TokenPicker = ({ onTokenSelected }: SelectedTokenProps) => {
 
   return (
     <div>
-      <HStack>
-        {ownedTokens && (
-          <>
-            <Picker
-              items={ownedTokens}
-              onSelected={(item) =>
-                onTokenSelected({
-                  tokenContract: item.contract.address,
-                  tokenId: BigNumber.from(item.id.tokenId).toNumber(),
-                  imageURL: item.media[0].gateway,
-                })
-              }
-              renderItem={renderItem}
-            />
-            {ownedTokens.length == 0 && <>You have no tokens.</>}
-          </>
-        )}
-      </HStack>
+      <TokenBox>
+        <HStackScroll>
+            {ownedTokens && (
+            <>
+                <Picker
+                  items={ownedTokens}
+                  onSelected={(item) =>
+                    onTokenSelected({
+                      tokenContract: item.contract.address,
+                      tokenId: BigNumber.from(item.id.tokenId).toNumber(),
+                      imageURL: item.media[0].gateway,
+                    })
+                  }
+                  renderItem={renderItem}
+                />
+                {ownedTokens.length == 0 && <>You have no tokens.</>}
+            </>
+            )}
+        </HStackScroll>
+      </TokenBox>
     </div>
   )
 }
+
+export const TokenBox = styled.div`
+    width: 760px;
+    height: 600px;
+    overflow: scroll;
+`
+
+export const HStackScroll = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: stretch;
+  flex-wrap: wrap;
+  gap: 1em;
+`
 
 const Item = styled.div`
   width: 150px;
