@@ -1,32 +1,32 @@
-import { useEffect, useState } from "react";
-import styled from "styled-components";
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
-import CardCreator from "../../components/creator/CardCreator";
+import { useEffect, useState } from 'react'
+import styled from 'styled-components'
+import Header from '../../components/Header'
+import Footer from '../../components/Footer'
+import CardCreator from '../../components/creator/CardCreator'
 
-const Gallery = () => {
-    const [domLoaded, setDomLoaded] = useState(false);
-    useEffect(() => {
-        setDomLoaded(true);
-    }, []);
+const CardSender = () => {
+  const [domLoaded, setDomLoaded] = useState(false)
+  useEffect(() => {
+    setDomLoaded(true)
+  }, [])
 
-    if (domLoaded) {
-        return (
-            <>
-                <Header />
+  if (domLoaded) {
+    return (
+      <>
+        <Header />
 
-                <Content>
-                    <FillSection>
-                        <h2>Create & Send Cards</h2>
-                        <CardCreator />
-                    </FillSection>
-                </Content>
+        <Content>
+          <FillSection>
+            <h2>Create & Send Cards</h2>
+            <CardCreator />
+          </FillSection>
+        </Content>
 
-                <Footer />
-            </>
-        );
-    }
-};
+        <Footer />
+      </>
+    )
+  }
+}
 
 export const Content = styled.div`
   display: flex;
@@ -36,7 +36,7 @@ export const Content = styled.div`
   flex-direction: column;
   gap: 3em;
   margin-bottom: 2em;
-`;
+`
 
 export const FillSection = styled.div`
   background: #111;
@@ -48,6 +48,6 @@ export const FillSection = styled.div`
   flex-wrap: wrap;
   flex-direction: column;
   gap: 1em;
-`;
+`
 
-export default Gallery;
+export default CardSender

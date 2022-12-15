@@ -1,15 +1,15 @@
-import { ConnectKitButton } from "connectkit";
-// import styled from "styled-components";
+import { ConnectKitButton } from 'connectkit'
+import styled from 'styled-components'
 
-// const StyledButton = styled.button`
-//   cursor: pointer;
-//   position: relative;
-//   display: inline-block;
-//   padding: 16px;
-//   color: #000;
-//   background: pur;
-//   font-size: large;
-// `;
+const StyledButton = styled.button`
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+  padding: 16px;
+  color: #000;
+  background: pur;
+  font-size: large;
+`
 
 const ConnectButton = () => {
   return (
@@ -23,7 +23,7 @@ const ConnectButton = () => {
     //     );
     //   }}
     // </ConnectKitButton.Custom>
-  );
-};
+  )
+}
 
-export default ConnectButton;
+export default ConnectButton

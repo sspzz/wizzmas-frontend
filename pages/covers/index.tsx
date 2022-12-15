@@ -1,35 +1,35 @@
-import { useEffect, useState } from "react";
-import styled from "styled-components";
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
-import ArtworkMinter from "../../components/artwork/ArtworkMinter";
-import MintFAQ from "../../components/MintFAQ";
+import { useEffect, useState } from 'react'
+import styled from 'styled-components'
+import Header from '../../components/Header'
+import Footer from '../../components/Footer'
+import ArtworkMinter from '../../components/artwork/ArtworkMinter'
+import MintFAQ from '../../components/faq/MintFAQ'
 
 const Covers = () => {
-    const [domLoaded, setDomLoaded] = useState(false);
-    useEffect(() => {
-        setDomLoaded(true);
-    }, []);
+  const [domLoaded, setDomLoaded] = useState(false)
+  useEffect(() => {
+    setDomLoaded(true)
+  }, [])
 
-    if (domLoaded) {
-        return (
-            <>
-                <Header />
+  if (domLoaded) {
+    return (
+      <>
+        <Header />
 
-                <Content>
-                    <FillSection>
-                        <ArtworkMinter />
-                    </FillSection>
-                    <Section>
-                        <MintFAQ />
-                    </Section>
-                </Content>
+        <Content>
+          <FillSection>
+            <ArtworkMinter />
+          </FillSection>
+          <Section>
+            <MintFAQ />
+          </Section>
+        </Content>
 
-                <Footer />
-            </>
-        );
-    };
-};
+        <Footer />
+      </>
+    )
+  }
+}
 
 export const Content = styled.div`
   display: flex;
@@ -39,7 +39,7 @@ export const Content = styled.div`
   flex-direction: column;
   gap: 3em;
   margin-bottom: 2em;
-`;
+`
 
 export const FillSection = styled.div`
   background: #111;
@@ -51,7 +51,7 @@ export const FillSection = styled.div`
   flex-wrap: wrap;
   flex-direction: column;
   gap: 1em;
-`;
+`
 
 export const Section = styled.div`
   background: #111;
@@ -63,10 +63,10 @@ export const Section = styled.div`
   flex-direction: column;
   gap: 1em;
   max-width: 800px;
-`;
+`
 
 export const Wrapper = styled.div`
   max-width: 500px;
-`;
+`
 
-export default Covers;
+export default Covers
