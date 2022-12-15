@@ -4,7 +4,7 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import CardCreator from "../../components/creator/CardCreator";
 
-const Gallery = () => {
+const CardSender = () => {
     const [domLoaded, setDomLoaded] = useState(false);
     useEffect(() => {
         setDomLoaded(true);
@@ -50,4 +50,4 @@ export const FillSection = styled.div`
   gap: 1em;
 `;
 
-export default Gallery;
+export default CardSender;

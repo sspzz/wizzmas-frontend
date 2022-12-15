@@ -102,7 +102,4 @@ const TokenImage = styled.img`
   max-height: 100%;
 `;
 
-
-
-
 export default TokenPicker;

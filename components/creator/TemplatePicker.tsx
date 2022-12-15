@@ -4,7 +4,6 @@ import WizzmasCardArtifact from "../../contracts/artifacts/WizzmasCard.json";
 import { range } from "../../lib/ArrayUtil";
 import Picker from "../generic/Picker";
 
-
 type TemplatePickerProps = {
     onTemplateSelected: (template: number) => void;
 };

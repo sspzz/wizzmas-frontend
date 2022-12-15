@@ -10,8 +10,6 @@ import { PrimaryButton, SmallTitle } from "../generic/StyledComponents";
 import DisplayError from "../generic/DisplayError";
 import { SelectedToken } from './TokenPicker';
 
-
-
 export type MintProps = {
     artworkType: number | undefined;
     templateType: number | undefined;

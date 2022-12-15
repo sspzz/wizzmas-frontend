@@ -50,6 +50,4 @@ export const FillSection = styled.div`
   gap: 1em;
 `;
 
-
-
 export default View;
