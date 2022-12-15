@@ -5,11 +5,11 @@ import { useAccount, useContractRead } from 'wagmi'
 import { SUPPORTED_TOKENS } from '../../constants'
 import { getNFTs } from '../../lib/AlchemyUtil'
 import Picker from '../generic/Picker'
+import { fetchRunesWalkCycleFront } from "../../lib/TokenArtwork";
 
 export interface SelectedToken {
   tokenContract: string
   tokenId: number
-  imageURL: string
 }
 
 type SelectedTokenProps = {
@@ -36,9 +36,13 @@ const TokenPicker = ({ onTokenSelected }: SelectedTokenProps) => {
   }, [supportedTokens])
 
   const renderItem = (item: any) => {
+    let id = BigNumber.from(item.id.tokenId).toNumber();
+    let imgUrl = fetchRunesWalkCycleFront(item.contract.address, id);
     return (
       <Item>
-        <TokenImage src={item.media[0].gateway} />
+        <TokenImageWrapper>
+            <TokenImage src={imgUrl} />
+        </TokenImageWrapper>
         <TokenTextWrapper>
           <TokenText>{item.metadata.name}</TokenText>
         </TokenTextWrapper>
@@ -51,7 +55,6 @@ const TokenPicker = ({ onTokenSelected }: SelectedTokenProps) => {
   }
 
   return (
-    <div>
       <TokenBox>
         <HStackScroll>
             {ownedTokens && (
@@ -62,7 +65,6 @@ const TokenPicker = ({ onTokenSelected }: SelectedTokenProps) => {
                     onTokenSelected({
                       tokenContract: item.contract.address,
                       tokenId: BigNumber.from(item.id.tokenId).toNumber(),
-                      imageURL: item.media[0].gateway,
                     })
                   }
                   renderItem={renderItem}
@@ -72,7 +74,6 @@ const TokenPicker = ({ onTokenSelected }: SelectedTokenProps) => {
             )}
         </HStackScroll>
       </TokenBox>
-    </div>
   )
 }
 
@@ -98,6 +99,10 @@ const Item = styled.div`
 
 const TokenTextWrapper = styled.div`
   padding: 0.2em;
+`
+
+const TokenImageWrapper = styled.div`
+    background-color: #c5a565;
 `
 
 const TokenText = styled.p`
