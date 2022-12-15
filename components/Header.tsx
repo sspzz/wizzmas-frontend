@@ -11,7 +11,7 @@ interface NavLink {
 }
 
 const navLinks: NavLink[] = [
-    { name: "Covers", path: "/covers" },
+    { name: "Covers", path: "/" },
     {
         name: "Send Cards",
         path: "/send",
@@ -38,7 +38,7 @@ const NavItem = ({ item }: { item: NavLink }) => {
     );
 };
 
-const Header: NextPage = () => {
+const Header = () => {
     const { chain } = useNetwork();
     const { address } = useAccount();
     const [domLoaded, setDomLoaded] = useState(false);
