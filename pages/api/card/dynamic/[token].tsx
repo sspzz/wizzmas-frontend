@@ -1,31 +1,27 @@
-import { ethers } from "ethers";
-import type { NextApiRequest, NextApiResponse } from "next";
-import { getCardsContract } from "../../../../contracts/WizzmasCardContract";
+import { ethers } from 'ethers'
+import type { NextApiRequest, NextApiResponse } from 'next'
+import { getCardsContract } from '../../../../contracts/WizzmasCardContract'
 
 function getProvider() {
-  return new ethers.providers.StaticJsonRpcProvider("http://127.0.0.1:8545", {
-    name: "Anvil",
+  return new ethers.providers.StaticJsonRpcProvider('http://127.0.0.1:8545', {
+    name: 'Anvil',
     chainId: 31337,
-  });
+  })
 }
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const token = parseInt(req.query.token as string, 10);
+  const token = parseInt(req.query.token as string, 10)
   if (token == undefined) {
-    return res.status(404).end();
+    return res.status(404).end()
   }
 
   try {
-    const contract = getCardsContract({ provider: getProvider() });
-    const mintedCard = await contract.getCard(token);
+    const contract = getCardsContract({ provider: getProvider() })
+    const mintedCard = await contract.getCard(token)
 
-    const frontUrl = `${
-      process.env.VERCEL_URL ?? "http://localhost:3000"
-    }/api/artwork/gif/${mintedCard.artwork}`;
+    const frontUrl = `${process.env.VERCEL_URL ?? 'http://localhost:3000'}/api/artwork/gif/${mintedCard.artwork}`
 
-    const backUrl = `${
-      process.env.VERCEL_URL ?? "http://localhost:3000"
-    }/api/card/img/${mintedCard.card}`;
+    const backUrl = `${process.env.VERCEL_URL ?? 'http://localhost:3000'}/api/card/img/${mintedCard.card}`
 
     const content = `
         <!DOCTYPE html>
@@ -91,11 +87,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         </div>
         </body>
         </html>
-    `;
-    return res.end(content);
+    `
+    return res.end(content)
   } catch {
-    return res.status(404).end();
+    return res.status(404).end()
   }
-};
+}
 
-export default handler;
+export default handler

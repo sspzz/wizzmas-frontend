@@ -1,21 +1,21 @@
-import { ReactNode, useState } from "react";
-import styled from "styled-components";
+import { ReactNode, useState } from 'react'
+import styled from 'styled-components'
 
 type PickerProps = {
-  items: any[];
-  renderItem: (item: any) => ReactNode;
-  onSelected: (selected: any) => void;
-};
+  items: any[]
+  renderItem: (item: any) => ReactNode
+  onSelected: (selected: any) => void
+}
 const Picker = ({ items, renderItem, onSelected }: PickerProps) => {
-  const [selected, setSelected] = useState<any | undefined>(undefined);
+  const [selected, setSelected] = useState<any | undefined>(undefined)
 
   return (
     <>
       {items.map((item) => (
         <div
           onClick={() => {
-            setSelected(item);
-            onSelected(item);
+            setSelected(item)
+            onSelected(item)
           }}
         >
           {JSON.stringify(item) === JSON.stringify(selected) && <Selected>{renderItem(item)}</Selected>}
@@ -23,8 +23,8 @@ const Picker = ({ items, renderItem, onSelected }: PickerProps) => {
         </div>
       ))}
     </>
-  );
-};
+  )
+}
 
 const Unselected = styled.div`
   color: #aaa;
@@ -35,7 +35,7 @@ const Unselected = styled.div`
     border: dashed;
     border-color: yellow;
   }
-`;
+`
 
 const Selected = styled.div`
   color: yellow;
@@ -46,6 +46,6 @@ const Selected = styled.div`
     border: dashed;
     border-color: yellow;
   }
-`;
+`
 
-export default Picker;
+export default Picker

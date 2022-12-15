@@ -1,29 +1,27 @@
-import { ethers } from "ethers";
-import type { NextApiRequest, NextApiResponse } from "next";
-import { getCardsContract } from "../../../../contracts/WizzmasCardContract";
+import { ethers } from 'ethers'
+import type { NextApiRequest, NextApiResponse } from 'next'
+import { getCardsContract } from '../../../../contracts/WizzmasCardContract'
 
 function getProvider() {
-  return new ethers.providers.StaticJsonRpcProvider("http://127.0.0.1:8545", {
-    name: "Anvil",
+  return new ethers.providers.StaticJsonRpcProvider('http://127.0.0.1:8545', {
+    name: 'Anvil',
     chainId: 31337,
-  });
+  })
 }
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const artwork = parseInt(req.query.artwork as string, 10);
-  const template = parseInt(req.query.template as string, 10);
-  const token = parseInt(req.query.token as string, 10);
-  const tokenContract = req.query.contract as string;
-  const message = req.query.message as string;
+  const artwork = parseInt(req.query.artwork as string, 10)
+  const template = parseInt(req.query.template as string, 10)
+  const token = parseInt(req.query.token as string, 10)
+  const tokenContract = req.query.contract as string
+  const message = req.query.message as string
 
   try {
-    const frontUrl = `${
-      process.env.VERCEL_URL ?? "http://localhost:3000"
-    }/api/artwork/img/${artwork}`;
+    const frontUrl = `${process.env.VERCEL_URL ?? 'http://localhost:3000'}/api/artwork/img/${artwork}`
 
     const backUrl = `${
-      process.env.VERCEL_URL ?? "http://localhost:3000"
-    }/api/card/img/generate?token=${token}&contract=${tokenContract}&message=${message}&template=${template}`;
+      process.env.VERCEL_URL ?? 'http://localhost:3000'
+    }/api/card/img/generate?token=${token}&contract=${tokenContract}&message=${message}&template=${template}`
 
     const content = `
         <!DOCTYPE html>
@@ -90,11 +88,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         </div>
         </body>
         </html>
-    `;
-    return res.end(content);
+    `
+    return res.end(content)
   } catch {
-    return res.status(404).end();
+    return res.status(404).end()
   }
-};
+}
 
-export default handler;
+export default handler
