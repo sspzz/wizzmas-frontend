@@ -5,7 +5,7 @@ import { useAccount, useContractRead } from 'wagmi'
 import { SUPPORTED_TOKENS } from '../../constants'
 import { getNFTs } from '../../lib/AlchemyUtil'
 import Picker from '../generic/Picker'
-import { fetchRunesWalkCycleFront } from "../../lib/TokenArtwork";
+import { fetchRunesWalkCycleFront } from '../../lib/TokenArtwork'
 
 export interface SelectedToken {
   tokenContract: string
@@ -36,12 +36,12 @@ const TokenPicker = ({ onTokenSelected }: SelectedTokenProps) => {
   }, [supportedTokens])
 
   const renderItem = (item: any) => {
-    let id = BigNumber.from(item.id.tokenId).toNumber();
-    let imgUrl = fetchRunesWalkCycleFront(item.contract.address, id);
+    let id = BigNumber.from(item.id.tokenId).toNumber()
+    let imgUrl = fetchRunesWalkCycleFront(item.contract.address, id)
     return (
       <Item>
         <TokenImageWrapper>
-            <TokenImage src={imgUrl} />
+          <TokenImage src={imgUrl} />
         </TokenImageWrapper>
         <TokenTextWrapper>
           <TokenText>{item.metadata.name}</TokenText>
@@ -55,32 +55,32 @@ const TokenPicker = ({ onTokenSelected }: SelectedTokenProps) => {
   }
 
   return (
-      <TokenBox>
-        <HStackScroll>
-            {ownedTokens && (
-            <>
-                <Picker
-                  items={ownedTokens}
-                  onSelected={(item) =>
-                    onTokenSelected({
-                      tokenContract: item.contract.address,
-                      tokenId: BigNumber.from(item.id.tokenId).toNumber(),
-                    })
-                  }
-                  renderItem={renderItem}
-                />
-                {ownedTokens.length == 0 && <>You have no tokens.</>}
-            </>
-            )}
-        </HStackScroll>
-      </TokenBox>
+    <TokenBox>
+      <HStackScroll>
+        {ownedTokens && (
+          <>
+            <Picker
+              items={ownedTokens}
+              onSelected={(item) =>
+                onTokenSelected({
+                  tokenContract: item.contract.address,
+                  tokenId: BigNumber.from(item.id.tokenId).toNumber(),
+                })
+              }
+              renderItem={renderItem}
+            />
+            {ownedTokens.length == 0 && <>You have no tokens.</>}
+          </>
+        )}
+      </HStackScroll>
+    </TokenBox>
   )
 }
 
 export const TokenBox = styled.div`
-    width: 760px;
-    height: 600px;
-    overflow: scroll;
+  width: 760px;
+  height: 600px;
+  overflow: scroll;
 `
 
 export const HStackScroll = styled.div`
@@ -102,7 +102,7 @@ const TokenTextWrapper = styled.div`
 `
 
 const TokenImageWrapper = styled.div`
-    background-color: #c5a565;
+  background-color: #c5a565;
 `
 
 const TokenText = styled.p`
