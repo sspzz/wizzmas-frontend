@@ -38,7 +38,7 @@ const NavItem = ({ item }: { item: NavLink }) => {
     );
 };
 
-const Header = () => {
+const Header: NextPage = () => {
     const { chain } = useNetwork();
     const { address } = useAccount();
     const [domLoaded, setDomLoaded] = useState(false);
