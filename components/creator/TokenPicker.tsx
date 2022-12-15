@@ -4,13 +4,12 @@ import styled from 'styled-components'
 import { useAccount, useContractRead } from 'wagmi'
 import { SUPPORTED_TOKENS } from '../../constants'
 import { getNFTs } from '../../lib/AlchemyUtil'
-import { HStack } from '../generic/StyledComponents'
 import Picker from '../generic/Picker'
+import { fetchRunesWalkCycleFront } from '../../lib/TokenArtwork'
 
 export interface SelectedToken {
   tokenContract: string
   tokenId: number
-  imageURL: string
 }
 
 type SelectedTokenProps = {
@@ -37,9 +36,13 @@ const TokenPicker = ({ onTokenSelected }: SelectedTokenProps) => {
   }, [supportedTokens])
 
   const renderItem = (item: any) => {
+    let id = BigNumber.from(item.id.tokenId).toNumber()
+    let imgUrl = fetchRunesWalkCycleFront(item.contract.address, id)
     return (
       <Item>
-        <TokenImage src={item.media[0].gateway} />
+        <TokenImageWrapper>
+          <TokenImage src={imgUrl} />
+        </TokenImageWrapper>
         <TokenTextWrapper>
           <TokenText>{item.metadata.name}</TokenText>
         </TokenTextWrapper>
@@ -52,8 +55,8 @@ const TokenPicker = ({ onTokenSelected }: SelectedTokenProps) => {
   }
 
   return (
-    <div>
-      <HStack>
+    <TokenBox>
+      <HStackScroll>
         {ownedTokens && (
           <>
             <Picker
@@ -62,7 +65,6 @@ const TokenPicker = ({ onTokenSelected }: SelectedTokenProps) => {
                 onTokenSelected({
                   tokenContract: item.contract.address,
                   tokenId: BigNumber.from(item.id.tokenId).toNumber(),
-                  imageURL: item.media[0].gateway,
                 })
               }
               renderItem={renderItem}
@@ -70,10 +72,25 @@ const TokenPicker = ({ onTokenSelected }: SelectedTokenProps) => {
             {ownedTokens.length == 0 && <>You have no tokens.</>}
           </>
         )}
-      </HStack>
-    </div>
+      </HStackScroll>
+    </TokenBox>
   )
 }
+
+export const TokenBox = styled.div`
+  width: 760px;
+  height: 600px;
+  overflow: scroll;
+`
+
+export const HStackScroll = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: stretch;
+  flex-wrap: wrap;
+  gap: 1em;
+`
 
 const Item = styled.div`
   width: 150px;
@@ -82,6 +99,10 @@ const Item = styled.div`
 
 const TokenTextWrapper = styled.div`
   padding: 0.2em;
+`
+
+const TokenImageWrapper = styled.div`
+  background-color: #c5a565;
 `
 
 const TokenText = styled.p`

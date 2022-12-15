@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { getCardsContract } from '../../../../contracts/WizzmasCardContract'
 import { card } from '../../../../lib/ImageUtil'
 import { getTemplateImagePath } from '../../../../lib/TemplateUtil'
-import { fetchERC721Artwork } from '../../../../lib/TokenArtwork'
+import { fetchERC721Artwork, fetchRunesWalkCycleFront } from '../../../../lib/TokenArtwork'
 
 function getProvider() {
   return new ethers.providers.StaticJsonRpcProvider('http://127.0.0.1:8545', {
@@ -21,7 +21,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const token = parseInt(req.query.token as string, 10)
     const contract = getCardsContract({ provider: getProvider() })
     const mintedCard = await contract.getCard(token)
-    const tokenImageURL = await fetchERC721Artwork(mintedCard.tokenContract, mintedCard.token, getProvider())
+    const tokenImageURL = fetchRunesWalkCycleFront(mintedCard.tokenContract, mintedCard.token)
 
     const imageBuffer = await card({
       templatePath: getTemplateImagePath(mintedCard.template),
