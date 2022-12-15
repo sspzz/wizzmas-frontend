@@ -43,7 +43,7 @@ export const PrimaryButton = styled.button`
   font-family: Alagard;
   cursor: pointer;
   font-size: x-large;
-  padding: 0.5em;
+  padding: 0.8em;
   flex-grow: 1;
   color: black;
   border: none;
@@ -58,6 +58,7 @@ export const PrimaryButton = styled.button`
     color: gray;
     background-color: darkgray;
   }
+  border-radius: 0.5em;
 `;
 
 export const Button = styled.button`

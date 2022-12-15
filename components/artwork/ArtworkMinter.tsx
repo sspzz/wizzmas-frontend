@@ -1,23 +1,12 @@
 import { NextPage } from "next";
-import { useState } from "react";
-import styled from "styled-components";
 import { useAccount, useContractRead } from "wagmi";
 import WizzmasArtworkMinterArtifact from "../../contracts/artifacts/WizzmasArtworkMinter.json";
-import ArtworkTypePicker from "./AvailableArtworkTypesPicker";
 import ArtworkClaim from "./ArtworkClaim";
 import ArtworkMint from "./ArtworkMint";
-import AvailableArtworkTypesPicker from "./AvailableArtworkTypesPicker";
 import CoverViewer from "./CoverViewer";
-import {
-  MediumTitle,
-  Segment,
-  SmallTitle,
-  VStack,
-} from "../generic/StyledComponents";
+import { MediumTitle, SmallTitle } from "../generic/StyledComponents";
 
 const ArtworkMinter: NextPage = () => {
-  const [artworkType, setArtworkType] = useState<number | undefined>(undefined);
-
   const { address } = useAccount();
   const {
     data: canClaim,
@@ -40,14 +29,6 @@ const ArtworkMinter: NextPage = () => {
     functionName: "mintEnabled",
   });
 
-  if (!address) {
-    return <SmallTitle>Connect wallet to mint!</SmallTitle>;
-  }
-
-  if (isMintEnabledLoading || isCanClaimLoading) {
-    return <SmallTitle>Loading...</SmallTitle>;
-  }
-
   if (isMintEnabledError) {
     return <SmallTitle>Could not read contract information!</SmallTitle>;
   }
@@ -56,21 +37,17 @@ const ArtworkMinter: NextPage = () => {
     return (
       <>
         <MediumTitle>Wizzmas Cover</MediumTitle>
+        {isMintEnabledLoading ||
+          (isCanClaimLoading && <SmallTitle>Loading...</SmallTitle>)}
         <CoverViewer />
-          {canClaim && <ArtworkClaim artworkType={0} />}
-          {/* {!canClaim && <ArtworkMint artworkType={artworkType} />} */}
+        {!address && <SmallTitle>Connect wallet to mint!</SmallTitle>}
+        {canClaim && <ArtworkClaim artworkType={0} />}
+        {!canClaim && <ArtworkMint artworkType={0} />}
       </>
     );
   } else {
     return <p>Mint is closed!</p>;
   }
 };
-
-const Content = styled.div`
-  border-style: dashed;
-  border-color: #444;
-  padding: 1em;
-  margin: 1em;
-`;
 
 export default ArtworkMinter;
