@@ -3,7 +3,7 @@ import { useState } from "react";
 import { PrimaryButton, VStack, HStack, SmallTitle } from "../generic/StyledComponents";
 import CardPreview from "./CardPreview";
 import TemplatePicker from "./TemplatePicker";
-import MessagePicker, { SelectedMessage } from "./MessagePicker";
+import MessagePicker from "./MessagePicker";
 import TokenPicker, { SelectedToken } from "./TokenPicker";
 import RecipientInput from "./RecipientInput";
 import Mint from "./Mint";
@@ -14,7 +14,7 @@ const CardCreator = () => {
     const [selectedCover, setSelectedCover] = useState<number>(0);
     const [selectedTemplate, setSelectedTemplate] = useState<number | undefined>(undefined);
     const [selectedToken, setSelectedToken] = useState<SelectedToken | undefined>(undefined);
-    const [selectedMessage, setSelectedMessage] = useState<SelectedMessage | undefined>(undefined);
+    const [selectedMessage, setSelectedMessage] = useState<string | undefined>(undefined);
     const [recipient, setRecipient] = useState<string | undefined>(undefined);
       
     return (
@@ -24,7 +24,7 @@ const CardCreator = () => {
                     <VStack>
                         {inputSelection == 0 && <TemplatePicker onTemplateSelected={setSelectedTemplate} />}
                         {inputSelection == 1 && <TokenPicker onTokenSelected={setSelectedToken} />}
-                        {inputSelection == 2 && <MessagePicker onMessageSelected={setSelectedMessage} />}
+                        {inputSelection == 2 && <MessagePicker onMessageValid={setSelectedMessage} />}
                         {inputSelection == 3 && <SmallTitle>Ready to Mint!</SmallTitle>}
                         <HStack>
                             <PrimaryButton disabled={inputSelection == 0} onClick={() => setInputSelection(inputSelection - 1)}>Previous</PrimaryButton>

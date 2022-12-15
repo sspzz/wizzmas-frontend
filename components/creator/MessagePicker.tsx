@@ -1,91 +1,81 @@
 import styled from "styled-components";
-import { useContractRead } from "wagmi";
-import WizzmasCardArtifact from "../../contracts/artifacts/WizzmasCard.json";
-import Picker from "../generic/Picker";
-
-
-export type SelectedMessage = {
-    messageId: number;
-    message: string;
-}
+import { useState } from "react";
+import DisplayError from "../generic/DisplayError";
+import { Button, MediumTitle, Segment, TextInput, VStack } from "../generic/StyledComponents";
 
 type MessagePickerProps = {
-    onMessageSelected: (message: SelectedMessage) => void;
+    onMessageValid: (message: string | undefined) => void;
 };
 
-const MessagePicker = ({ onMessageSelected }: MessagePickerProps) => {
-    const {
-        data: messages,
-        isError,
-        isLoading,
-      } = useContractRead({
-        addressOrName: process.env.NEXT_PUBLIC_CARD_CONTRACT_ADDRESS ?? "",
-        contractInterface: WizzmasCardArtifact.abi,
-        functionName: "availableMessages",
-    });
+const MessagePicker = ({
+    onMessageValid 
+}: MessagePickerProps) => {
+    const [message, setMessage] = useState("");
+    const [validMessage, setValidMessage] = useState(false);
+    const [addedMessage, setAddedMessage] = useState<string | undefined>(undefined);
+    const [inputError, setInputError] = useState<Error | null>(null); 
 
-    if (isLoading) {
-        return <>Loading messages...</>;
-    }
-    
-    if (isError) {
-        return <>Could not load messages...</>;
+    function validate(e: any) {
+        const message = e.target.value;
+        setMessage(message);
+        setValidMessage(message.length < 64);
     }
 
-    const renderItem = (message: SelectedMessage) => {
-        return (
-            <Item>
-                <TextWrapper>
-                    <Text>{message.message}</Text>
-                </TextWrapper>
-            </Item>
+    function addMessage() {
+        setInputError(
+            validMessage && message.length > 0 ? null : Error("Invalid address")
         );
-    };
+        onMessageValid(
+            validMessage ? message : undefined 
+        );
+        setAddedMessage(validMessage ? message : undefined);
+    }
 
+    function clear() {
+        setMessage("");
+        setAddedMessage(undefined);
+        onMessageValid(undefined);
+    }
     
     return (
-        <div>
-            {messages && (
+        <>
+            <MediumTitle>Enter message:</MediumTitle>
+            <VStack>
                 <>
-                    <h3>Select Message: </h3>
-                    <MessageStack>
-                        <Picker
-                            items={messages.map((message, i) => ({messageId: i, message: message}))}
-                            renderItem={renderItem}
-                            onSelected={onMessageSelected}
-                        />
-                    </MessageStack>
+                    <Segment>
+                        {addedMessage != undefined && (
+                            <AddedMessage>
+                                {addedMessage}
+                            </AddedMessage>
+                        )}
+                        {addedMessage == undefined && (
+                            <TextInput
+                                required
+                                value={message}
+                                onChange={validate}
+                                minLength={1}
+                                maxLength={63}
+                                placeholder="Have a very Merry Wizzmas!"
+                            />
+                        )}
+                        <Button onClick={addedMessage == undefined ? addMessage : clear} disabled={!validMessage}>
+                            {addedMessage != undefined && <>Remove Message</>}
+                            {addedMessage == undefined && <>Add Message</>}
+                        </Button>
+                    </Segment>
+                    <DisplayError error={inputError} />
                 </>
-            )}
-        </div>
+            </VStack>
+        </>
     );
 };
 
-const MessageStack = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-content: stretch;
-    flex-wrap: wrap;
-    gap: 1em;
-`;
-
-const Item = styled.div`
-`;
-
-const TextWrapper = styled.div`
-  padding: 0.2em;
-`;
-
-const Text = styled.p`
-  text-align: center;
-  font-size: 0.9em;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  word-wrap: break-word;
-  display: block;
-  line-height: 1em;
-  max-height: 2em; /* number of lines to show  */
+const AddedMessage = styled.div`
+  width: 100%;
+  padding: 1em;
+  color: yellow;
+  border: dashed;
+  border-color: yellow;
 `;
 
 export default MessagePicker;

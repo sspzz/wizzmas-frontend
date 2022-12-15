@@ -8,7 +8,6 @@ import {
 import WizzmasCardArtifact from "../../contracts/artifacts/WizzmasCard.json";
 import { PrimaryButton, SmallTitle } from "../generic/StyledComponents";
 import DisplayError from "../generic/DisplayError";
-import { SelectedMessage } from "./MessagePicker";
 import { SelectedToken } from './TokenPicker';
 
 
@@ -16,7 +15,7 @@ import { SelectedToken } from './TokenPicker';
 export type MintProps = {
     artworkType: number | undefined;
     templateType: number | undefined;
-    message: SelectedMessage | undefined;
+    message: string | undefined;
     token: SelectedToken | undefined;
     recipient: string | undefined;    
 };
@@ -39,7 +38,7 @@ const Mint:NextPage<MintProps> = ({
           token?.tokenId,
           artworkType,
           templateType,
-          message?.messageId,
+          message,
           recipient ? ethers.utils.getAddress(recipient) : undefined,
         ],
     });
